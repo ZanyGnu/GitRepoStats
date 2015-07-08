@@ -2,7 +2,9 @@
   "locked": false,
   "version": -9998,
   "projectFileDependencyGroups": {
-    "": [],
+    "": [
+      "LibGit2Sharp >= 0.22.0-pre20150606092322"
+    ],
     "DNX,Version=v4.5.1": [],
     "DNXCore,Version=v5.0": [
       "System.Console >= 4.0.0-beta-22816",
@@ -13,6 +15,75 @@
     ]
   },
   "libraries": {
+    "LibGit2Sharp/0.22.0-pre20150606092322": {
+      "serviceable": false,
+      "sha": "ub/SNr+KmTRwpDbSBXjugXFtnhRYA/MAhTncsMHo5RhjxnemJT2PfvCDKYPBv0f7V3FrNRDoi+mADP7o8k3cPg==",
+      "frameworks": {
+        "DNX,Version=v4.5.1": {
+          "dependencies": {
+            "LibGit2Sharp.NativeBinaries": "[1.0.51]"
+          },
+          "frameworkAssemblies": [],
+          "runtimeAssemblies": [
+            "lib/net40/LibGit2Sharp.dll"
+          ],
+          "compileAssemblies": [
+            "lib/net40/LibGit2Sharp.dll"
+          ]
+        },
+        "DNXCore,Version=v5.0": {
+          "dependencies": {
+            "LibGit2Sharp.NativeBinaries": "[1.0.51]"
+          },
+          "frameworkAssemblies": [],
+          "runtimeAssemblies": [],
+          "compileAssemblies": []
+        }
+      },
+      "files": [
+        "LibGit2Sharp.0.22.0-pre20150606092322.nupkg",
+        "LibGit2Sharp.0.22.0-pre20150606092322.nupkg.sha512",
+        "LibGit2Sharp.nuspec",
+        "App_Readme/LibGit2Sharp.CHANGES.md",
+        "App_Readme/LibGit2Sharp.LICENSE.md",
+        "App_Readme/LibGit2Sharp.README.md",
+        "lib/net40/LibGit2Sharp.dll",
+        "lib/net40/LibGit2Sharp.pdb",
+        "lib/net40/LibGit2Sharp.xml"
+      ]
+    },
+    "LibGit2Sharp.NativeBinaries/1.0.51": {
+      "serviceable": false,
+      "sha": "JKcQUczbEVZ41zUlkURfJTVAONCIhDGoEfJVv4vo+MmfWcI1AmEMh2aQ/jKFD2lW0GG5Ybo/JIwFhQdRGDDjzA==",
+      "frameworks": {
+        "DNX,Version=v4.5.1": {
+          "dependencies": {},
+          "frameworkAssemblies": [],
+          "runtimeAssemblies": [],
+          "compileAssemblies": []
+        },
+        "DNXCore,Version=v5.0": {
+          "dependencies": {},
+          "frameworkAssemblies": [],
+          "runtimeAssemblies": [],
+          "compileAssemblies": []
+        }
+      },
+      "files": [
+        "LibGit2Sharp.NativeBinaries.1.0.51.nupkg",
+        "LibGit2Sharp.NativeBinaries.1.0.51.nupkg.sha512",
+        "LibGit2Sharp.NativeBinaries.nuspec",
+        "build/LibGit2Sharp.NativeBinaries.props",
+        "libgit2/libgit2.license.txt",
+        "libgit2/libgit2_hash.txt",
+        "libgit2/linux/amd64/libgit2-ff8d635.so",
+        "libgit2/osx/libgit2-ff8d635.dylib",
+        "libgit2/windows/amd64/git2-ff8d635.dll",
+        "libgit2/windows/amd64/git2-ff8d635.pdb",
+        "libgit2/windows/x86/git2-ff8d635.dll",
+        "libgit2/windows/x86/git2-ff8d635.pdb"
+      ]
+    },
     "Microsoft.CSharp/4.0.0-beta-22816": {
       "serviceable": false,
       "sha": "FGnaYvmoVLd0QTnOyHfm+C79a9CGqQAoh76Ix9++a4SdeaAB8PgpB2Vi/Uc5jcp491QvPyPQjtXCuhRfqWvNkw==",
