@@ -58,12 +58,79 @@ namespace RepoStats
                 //    }
                 //}
 
+                FindHotFiles();
+
+
                 foreach (IndexEntry e in repo.Index)
                 {
                     Console.WriteLine("{0} {1} {2}       {3}",
                         Convert.ToString((int)e.Mode, 8),
                         e.Id.ToString(), (int)e.StageLevel, e.Path);
                 }
+            }
+        }
+
+        static void FindHotFiles()
+        {
+            Dictionary<string, GitFileInfo> gitFileInfos = new Dictionary<string, GitFileInfo>();
+
+            string repoRoot = "C:\\rdnext\\Azure\\Compute";
+
+            using (var repo = new Repository(repoRoot))
+            {
+                int commitCount = repo.Commits.Count();
+                int currentCommitCount = 0;
+                foreach (Commit c in repo.Commits)
+                {
+                    currentCommitCount++;
+                    Console.Write("\rProcessing {0}/{1} ({2}%)    ", currentCommitCount, commitCount, currentCommitCount * 100 / commitCount);
+                    // for each commit, look at the files modified.
+                    if (c.Parents.Count() == 0)
+                    {
+                        continue;
+                    }
+                    // TODO: need to handle multiple parents.
+                    Patch changes = repo.Diff.Compare<Patch>(c.Tree, c.Parents.First().Tree);
+
+                    foreach (PatchEntryChanges patchEntryChanges in changes)
+                    {
+                        //Console.WriteLine("Path:{0} +{1} -{2} ",
+                        //        patchEntryChanges.Path,
+                        //        patchEntryChanges.LinesAdded,
+                        //        patchEntryChanges.LinesDeleted
+                        //    );
+                        if (!gitFileInfos.ContainsKey(patchEntryChanges.Path))
+                        {
+                            gitFileInfos.Add(
+                                patchEntryChanges.Path,
+                                new GitFileInfo()
+                                {
+                                    Path = patchEntryChanges.Path,
+                                    LinesAdded = 0,
+                                    LinesDeleted = 0,
+                                    NumberOfCommits = 0
+                                });
+                        }
+
+                        gitFileInfos[patchEntryChanges.Path].LinesAdded += patchEntryChanges.LinesAdded;
+                        gitFileInfos[patchEntryChanges.Path].LinesDeleted += patchEntryChanges.LinesDeleted;
+                        gitFileInfos[patchEntryChanges.Path].NumberOfCommits ++;
+                    }
+                }
+            }
+
+            Console.WriteLine("Files ordered by number of modifications");
+            IOrderedEnumerable<GitFileInfo> orderedChanges = gitFileInfos.Values.OrderByDescending(c => c.LinesDeleted + c.LinesAdded);
+            foreach(GitFileInfo fileInfo in orderedChanges.Take(10))
+            {
+                Console.WriteLine("\t{0} {1} {2}", fileInfo.Path, fileInfo.LinesAdded, fileInfo.LinesDeleted);
+            }
+
+            Console.WriteLine("Files ordered by number of commit touches");
+            orderedChanges = gitFileInfos.Values.OrderByDescending(c => c.NumberOfCommits);
+            foreach (GitFileInfo fileInfo in orderedChanges.Take(10))
+            {
+                Console.WriteLine("\t{0} {1}", fileInfo.Path, fileInfo.NumberOfCommits);
             }
         }
     }
