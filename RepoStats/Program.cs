@@ -19,6 +19,14 @@ namespace RepoStats
             public int LinesDeleted { get; set; }
         }
 
+        class GitCommitterInfo
+        {
+            public string Author { get; set; }
+            public int NumberOfCommits { get; set; }
+            public int LinesAdded { get; set; }
+            public int LinesDeleted { get; set; }
+        }
+
         static void Main(string[] args)
         {
             Console.WriteLine("Hello world");
@@ -58,7 +66,7 @@ namespace RepoStats
                 //    }
                 //}
 
-                FindHotFiles();
+                FindHotFilesAndCommitters();
 
 
                 foreach (IndexEntry e in repo.Index)
@@ -70,9 +78,10 @@ namespace RepoStats
             }
         }
 
-        static void FindHotFiles()
+        static void FindHotFilesAndCommitters()
         {
             Dictionary<string, GitFileInfo> gitFileInfos = new Dictionary<string, GitFileInfo>();
+            Dictionary<string, GitCommitterInfo> gitComitterInfos = new Dictionary<string, GitCommitterInfo>();
 
             string repoRoot = "C:\\rdnext\\Azure\\Compute";
 
@@ -84,11 +93,26 @@ namespace RepoStats
                 {
                     currentCommitCount++;
                     Console.Write("\rProcessing {0}/{1} ({2}%)    ", currentCommitCount, commitCount, currentCommitCount * 100 / commitCount);
+                    
                     // for each commit, look at the files modified.
                     if (c.Parents.Count() == 0)
                     {
                         continue;
                     }
+
+                    if (!gitComitterInfos.ContainsKey(c.Committer.Name))
+                    {
+                        gitComitterInfos.Add(c.Committer.Name, new GitCommitterInfo()
+                        {
+                            Author = c.Committer.Name,
+                            LinesAdded = 0,
+                            LinesDeleted = 0,
+                            NumberOfCommits = 0
+                        });
+                    }
+
+                    gitComitterInfos[c.Committer.Name].NumberOfCommits++;
+
                     // TODO: need to handle multiple parents.
                     Patch changes = repo.Diff.Compare<Patch>(c.Tree, c.Parents.First().Tree);
 
@@ -99,6 +123,8 @@ namespace RepoStats
                         //        patchEntryChanges.LinesAdded,
                         //        patchEntryChanges.LinesDeleted
                         //    );
+
+                        // Update File details
                         if (!gitFileInfos.ContainsKey(patchEntryChanges.Path))
                         {
                             gitFileInfos.Add(
@@ -115,22 +141,41 @@ namespace RepoStats
                         gitFileInfos[patchEntryChanges.Path].LinesAdded += patchEntryChanges.LinesAdded;
                         gitFileInfos[patchEntryChanges.Path].LinesDeleted += patchEntryChanges.LinesDeleted;
                         gitFileInfos[patchEntryChanges.Path].NumberOfCommits ++;
+
+                        // Update committer data
+
+                        gitComitterInfos[c.Committer.Name].LinesAdded += patchEntryChanges.LinesAdded;
+                        gitComitterInfos[c.Committer.Name].LinesDeleted += patchEntryChanges.LinesDeleted;
                     }
                 }
             }
 
             Console.WriteLine("Files ordered by number of modifications");
             IOrderedEnumerable<GitFileInfo> orderedChanges = gitFileInfos.Values.OrderByDescending(c => c.LinesDeleted + c.LinesAdded);
-            foreach(GitFileInfo fileInfo in orderedChanges.Take(10))
+            foreach(GitFileInfo fileInfo in orderedChanges.Take(20))
             {
                 Console.WriteLine("\t{0} {1} {2}", fileInfo.Path, fileInfo.LinesAdded, fileInfo.LinesDeleted);
             }
 
             Console.WriteLine("Files ordered by number of commit touches");
             orderedChanges = gitFileInfos.Values.OrderByDescending(c => c.NumberOfCommits);
-            foreach (GitFileInfo fileInfo in orderedChanges.Take(10))
+            foreach (GitFileInfo fileInfo in orderedChanges.Take(20))
             {
                 Console.WriteLine("\t{0} {1}", fileInfo.Path, fileInfo.NumberOfCommits);
+            }
+
+            Console.WriteLine("Committers ordered by number of modifications");
+            IOrderedEnumerable<GitCommitterInfo> orderedChangesByCommitters = gitComitterInfos.Values.OrderByDescending(c => c.LinesDeleted + c.LinesAdded);
+            foreach (GitCommitterInfo committerInfo in orderedChangesByCommitters.Take(20))
+            {
+                Console.WriteLine("\t{0} {1} {2}", committerInfo.Author, committerInfo.LinesAdded, committerInfo.LinesDeleted);
+            }
+
+            Console.WriteLine("Committers ordered by number of commit touches");
+            orderedChangesByCommitters = gitComitterInfos.Values.OrderByDescending(c => c.NumberOfCommits);
+            foreach (GitCommitterInfo committerInfo in orderedChangesByCommitters.Take(20))
+            {
+                Console.WriteLine("\t{0} {1}", committerInfo.Author, committerInfo.NumberOfCommits);
             }
         }
     }
