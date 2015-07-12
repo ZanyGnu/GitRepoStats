@@ -67,14 +67,6 @@ namespace RepoStats
                 //}
 
                 FindHotFilesAndCommitters();
-
-
-                foreach (IndexEntry e in repo.Index)
-                {
-                    Console.WriteLine("{0} {1} {2}       {3}",
-                        Convert.ToString((int)e.Mode, 8),
-                        e.Id.ToString(), (int)e.StageLevel, e.Path);
-                }
             }
         }
 
