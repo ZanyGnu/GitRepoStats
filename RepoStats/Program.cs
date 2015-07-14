@@ -1,6 +1,7 @@
 ﻿using LibGit2Sharp;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -29,8 +30,16 @@ namespace RepoStats
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello world");
-            string repoRoot = "C:\\rdnext\\Azure\\Compute";
+            string repoRoot = string.Empty;
+
+            if (args != null && args.Length > 0)
+            {
+                repoRoot = args[0];
+            }
+            else
+            {
+                repoRoot = ConfigurationManager.AppSettings["RepoRoot"];
+            }
             
             using (var repo = new Repository(repoRoot))
             {
@@ -54,28 +63,14 @@ namespace RepoStats
                     Console.WriteLine();
                 }
 
-                // build change vector by file. 
-                // note: Not efficient at all.
-                //foreach(string file in Directory.GetFiles(repoRoot, "*", SearchOption.AllDirectories))
-                //{
-                //    string fileEntry = file.Substring(repoRoot.Length + 1);
-                //    Console.WriteLine(fileEntry);
-                //    foreach (LogEntry log in repo.Commits.QueryBy(fileEntry))
-                //    {
-                //        Console.WriteLine("\t " + log.Commit.Sha);
-                //    }
-                //}
-
-                FindHotFilesAndCommitters();
+                FindHotFilesAndCommitters(repoRoot);
             }
         }
 
-        static void FindHotFilesAndCommitters()
+        static void FindHotFilesAndCommitters(string repoRoot)
         {
             Dictionary<string, GitFileInfo> gitFileInfos = new Dictionary<string, GitFileInfo>();
             Dictionary<string, GitCommitterInfo> gitComitterInfos = new Dictionary<string, GitCommitterInfo>();
-
-            string repoRoot = "C:\\rdnext\\Azure\\Compute";
 
             using (var repo = new Repository(repoRoot))
             {
