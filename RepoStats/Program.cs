@@ -10,24 +10,25 @@ using System.Threading.Tasks;
 
 namespace RepoStats
 {
-    class Program
+    public class GitFileInfo
     {
-        class GitFileInfo
-        {
-            public string Path { get; set; }
-            public int NumberOfCommits { get; set; }
-            public int LinesAdded { get; set; }
-            public int LinesDeleted { get; set; }
-        }
+        public string Path { get; set; }
+        public int NumberOfCommits { get; set; }
+        public int LinesAdded { get; set; }
+        public int LinesDeleted { get; set; }
+    }
 
-        class GitCommitterInfo
-        {
-            public string Author { get; set; }
-            public int NumberOfCommits { get; set; }
-            public int LinesAdded { get; set; }
-            public int LinesDeleted { get; set; }
-        }
+    public class GitCommitterInfo
+    {
+        public string Author { get; set; }
+        public int NumberOfCommits { get; set; }
+        public int LinesAdded { get; set; }
+        public int LinesDeleted { get; set; }
+    }
 
+    public class Program
+    {
+        
         static void Main(string[] args)
         {
             string repoRoot = string.Empty;
