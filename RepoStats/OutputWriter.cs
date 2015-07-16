@@ -12,7 +12,7 @@ namespace RepoStats
         public static void OutputCheckinDetails(Dictionary<string, GitFileInfo> gitFileInfos, Dictionary<string, GitCommitterInfo> gitComitterInfos)
         {
             StringBuilder trFileInfosContent = new StringBuilder();
-            foreach (GitFileInfo fileInfo in gitFileInfos.Values.OrderByDescending(c => c.LinesDeleted + c.LinesAdded))
+            foreach (GitFileInfo fileInfo in gitFileInfos.Values.OrderByDescending(c => (c.LinesDeleted + c.LinesAdded)))
             {
                 trFileInfosContent.AppendFormat(
                     trTemplate, 
@@ -32,7 +32,7 @@ namespace RepoStats
               <td valign=top style='width:50pt;border:solid #BDD6EE 1.0pt;
               border-top:none;padding:0in 5.4pt 0in 5.4pt'>
               <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'><b>{0}</b></p>
+              normal'>{0}</p>
               </td>
               <td valign=top style='width:50pt;border-top:none;border-left:
               none;border-bottom:solid #BDD6EE 1.0pt;border-right:solid #BDD6EE 1.0pt;
@@ -128,24 +128,24 @@ namespace RepoStats
               <td valign=top style='width:50pt;border:solid #ED7D31 1.0pt;
               border-right:none;background:#C00000;padding:0in 5.4pt 0in 5.4pt;height:12.75pt'>
               <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'><b><span style='color:white'>CL</span></b></p>
+              normal'><b><span style='color:white'>Lines Added</span></b></p>
               </td>
               <td valign=top style='width:50pt;border-top:solid #ED7D31 1.0pt;
               border-left:none;border-bottom:solid #ED7D31 1.0pt;border-right:none;
               background:#C00000;padding:0in 5.4pt 0in 5.4pt;height:12.75pt'>
               <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'><b><span style='color:white'>User</span></b></p>
+              normal'><b><span style='color:white'>Lines Removed</span></b></p>
               </td>
               <td valign=top style='width:100pt;border-top:solid #ED7D31 1.0pt;
               border-left:none;border-bottom:solid #ED7D31 1.0pt;border-right:none;
               background:#C00000;padding:0in 5.4pt 0in 5.4pt;height:12.75pt'>
               <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'><b><span style='color:white'>Checkin Time</span></b></p>
+              normal'><b><span style='color:white'>Number of commits</span></b></p>
               </td>
               <td valign=top style='width:500pt;border:solid #ED7D31 1.0pt;
               border-left:none;background:#C00000;padding:0in 5.4pt 0in 5.4pt;height:12.75pt'>
               <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'><b><span style='color:white'>Description</span></b></p>
+              normal'><b><span style='color:white'>File Path</span></b></p>
               </td>
              </tr>
              {0}
