@@ -165,6 +165,8 @@ namespace RepoStats
             {
                 Console.WriteLine("\t{0} {1}", committerInfo.Author, committerInfo.NumberOfCommits);
             }
+
+            OutputWriter.OutputCheckinDetails(gitFileInfos, gitComitterInfos);
         }
     }
 }
