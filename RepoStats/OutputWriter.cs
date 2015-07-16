@@ -11,6 +11,8 @@ namespace RepoStats
     {
         public static void OutputCheckinDetails(Dictionary<string, GitFileInfo> gitFileInfos, Dictionary<string, GitCommitterInfo> gitComitterInfos)
         {
+            string fileInfoChangesTableString = tableTemplate;
+            
             StringBuilder trFileInfosContent = new StringBuilder();
             foreach (GitFileInfo fileInfo in gitFileInfos.Values.OrderByDescending(c => (c.LinesDeleted + c.LinesAdded)))
             {
@@ -22,10 +24,22 @@ namespace RepoStats
                     fileInfo.Path);
             }
 
+            fileInfoChangesTableString = String.Format(
+                fileInfoChangesTableString
+                    .Replace("{0}", "%0%")
+                    .Replace("{1}", "%1%")
+                    .Replace("{", "{{")
+                    .Replace("}", "}}")
+                    .Replace("%0%", "{0}")
+                    .Replace("%1%", "{1}"), trFileInfosContent);
+
             File.WriteAllText("report.html",
-                String.Format(htmlTemplate.Replace("{0}", "%0%").Replace("{1}", "%1%").Replace("{", "{{").Replace("}", "}}").Replace("%0%", "{0}").Replace("%1%", "{1}"),
-                trFileInfosContent,
-                trFileInfosContent));
+                String.Concat(
+                    htmlPreTemplate,
+                    fileInfoChangesTableString,
+                    tableFillerTemplate,
+                    fileInfoChangesTableString,
+                    htmlPostTemplate));
         }
 
         private static string trTemplate = @" <tr>
@@ -54,7 +68,37 @@ namespace RepoStats
               </td>
              </tr>";
 
-        private static string htmlTemplate = @"<html>
+        private static string tableTemplate = @"
+            <table class=MsoTable15Grid4Accent2 border=1 cellspacing=0 cellpadding=0
+             style='border-collapse:collapse;border:none'>
+             <tr style='height:12.75pt'>
+              <td valign=top style='width:50pt;border:solid #ED7D31 1.0pt;
+              border-right:none;background:#C00000;padding:0in 5.4pt 0in 5.4pt;height:12.75pt'>
+              <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+              normal'><b><span style='color:white'>Lines Added</span></b></p>
+              </td>
+              <td valign=top style='width:50pt;border-top:solid #ED7D31 1.0pt;
+              border-left:none;border-bottom:solid #ED7D31 1.0pt;border-right:none;
+              background:#C00000;padding:0in 5.4pt 0in 5.4pt;height:12.75pt'>
+              <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+              normal'><b><span style='color:white'>Lines Removed</span></b></p>
+              </td>
+              <td valign=top style='width:100pt;border-top:solid #ED7D31 1.0pt;
+              border-left:none;border-bottom:solid #ED7D31 1.0pt;border-right:none;
+              background:#C00000;padding:0in 5.4pt 0in 5.4pt;height:12.75pt'>
+              <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+              normal'><b><span style='color:white'>Number of commits</span></b></p>
+              </td>
+              <td valign=top style='width:500pt;border:solid #ED7D31 1.0pt;
+              border-left:none;background:#C00000;padding:0in 5.4pt 0in 5.4pt;height:12.75pt'>
+              <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
+              normal'><b><span style='color:white'>File Path</span></b></p>
+              </td>
+             </tr>
+             {0}
+            </table>";
+
+        private static string htmlPreTemplate = @"<html>
 
           <html>
 
@@ -122,76 +166,23 @@ namespace RepoStats
             <br>
             </p>
 
-            <table class=MsoTable15Grid4Accent2 border=1 cellspacing=0 cellpadding=0
-             style='border-collapse:collapse;border:none'>
-             <tr style='height:12.75pt'>
-              <td valign=top style='width:50pt;border:solid #ED7D31 1.0pt;
-              border-right:none;background:#C00000;padding:0in 5.4pt 0in 5.4pt;height:12.75pt'>
-              <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'><b><span style='color:white'>Lines Added</span></b></p>
-              </td>
-              <td valign=top style='width:50pt;border-top:solid #ED7D31 1.0pt;
-              border-left:none;border-bottom:solid #ED7D31 1.0pt;border-right:none;
-              background:#C00000;padding:0in 5.4pt 0in 5.4pt;height:12.75pt'>
-              <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'><b><span style='color:white'>Lines Removed</span></b></p>
-              </td>
-              <td valign=top style='width:100pt;border-top:solid #ED7D31 1.0pt;
-              border-left:none;border-bottom:solid #ED7D31 1.0pt;border-right:none;
-              background:#C00000;padding:0in 5.4pt 0in 5.4pt;height:12.75pt'>
-              <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'><b><span style='color:white'>Number of commits</span></b></p>
-              </td>
-              <td valign=top style='width:500pt;border:solid #ED7D31 1.0pt;
-              border-left:none;background:#C00000;padding:0in 5.4pt 0in 5.4pt;height:12.75pt'>
-              <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'><b><span style='color:white'>File Path</span></b></p>
-              </td>
-             </tr>
-             {0}
-            </table>
+            ";
 
+        private static string tableFillerTemplate = @"
+        
             <p class=MsoNormal>&nbsp;</p>
             <br><br><br><hr><br><br>
             <p class=MsoNormal><i>Content</i></p>
 
-
-            <table class=MsoTable15Grid1LightAccent1 border=1 cellspacing=0 cellpadding=0
-             style='border-collapse:collapse;border:none'>
-              <td valign=top style='width:50pt;border:solid #BDD6EE 1.0pt;
-              border-bottom:solid #9CC2E5 1.5pt;padding:0in 5.4pt 0in 5.4pt'>
-              <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'><b>CL</b></p>
-              </td>
-              <td valign=top style='width:50pt;border-top:solid #BDD6EE 1.0pt;
-              border-left:none;border-bottom:solid #9CC2E5 1.5pt;border-right:solid #BDD6EE 1.0pt;
-              padding:0in 5.4pt 0in 5.4pt'>
-              <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'><b>User</b></p>
-              </td>
-              <td valign=top style='width:100pt;border-top:solid #BDD6EE 1.0pt;
-              border-left:none;border-bottom:solid #9CC2E5 1.5pt;border-right:solid #BDD6EE 1.0pt;
-              padding:0in 5.4pt 0in 5.4pt'>
-              <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'><b>Checkin Time</b></p>
-              </td>
-              <td valign=top style='width:500pt;border-top:solid #BDD6EE 1.0pt;
-              border-left:none;border-bottom:solid #9CC2E5 1.5pt;border-right:solid #BDD6EE 1.0pt;
-              padding:0in 5.4pt 0in 5.4pt'>
-              <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'><b>Description</b></p>
-              </td>
-             </tr>
-             {1}
-            </table>
-
             <p class=MsoNormal>&nbsp;</p>
 
             <p class=MsoNormal>&nbsp;</p>
 
             <p class=MsoNormal>&nbsp;</p>
 
-            <p class=MsoNormal>&nbsp;</p>
+            <p class=MsoNormal>&nbsp;</p>";
+
+        private static string htmlPostTemplate = @"
             <br><br><hr><br>
             </div>
 
