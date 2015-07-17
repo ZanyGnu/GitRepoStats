@@ -12,8 +12,8 @@ namespace RepoStats
         public static void OutputCheckinDetails(Dictionary<string, GitFileInfo> gitFileInfos, Dictionary<string, GitCommitterInfo> gitComitterInfos)
         {
             string fileInfoChangesTableString = tableTemplate;
-            
             StringBuilder trFileInfosContent = new StringBuilder();
+
             foreach (GitFileInfo fileInfo in gitFileInfos.Values.OrderByDescending(c => (c.LinesDeleted + c.LinesAdded)))
             {
                 trFileInfosContent.AppendFormat(
@@ -33,12 +33,35 @@ namespace RepoStats
                     .Replace("%0%", "{0}")
                     .Replace("%1%", "{1}"), trFileInfosContent);
 
+
+            string committerInfoTableString = tableTemplate;
+            StringBuilder trCommitterInfosContent = new StringBuilder();
+
+            foreach (GitCommitterInfo committerInfo in gitComitterInfos.Values.OrderByDescending(c => (c.LinesDeleted + c.LinesAdded)))
+            {
+                trCommitterInfosContent.AppendFormat(
+                    trTemplate,
+                    committerInfo.LinesAdded,
+                    committerInfo.LinesDeleted,
+                    committerInfo.NumberOfCommits,
+                    committerInfo.Author);
+            }
+
+            committerInfoTableString = String.Format(
+                committerInfoTableString
+                    .Replace("{0}", "%0%")
+                    .Replace("{1}", "%1%")
+                    .Replace("{", "{{")
+                    .Replace("}", "}}")
+                    .Replace("%0%", "{0}")
+                    .Replace("%1%", "{1}"), trCommitterInfosContent);
+            
             File.WriteAllText("report.html",
                 String.Concat(
                     htmlPreTemplate,
                     fileInfoChangesTableString,
                     tableFillerTemplate,
-                    fileInfoChangesTableString,
+                    committerInfoTableString,
                     htmlPostTemplate));
         }
 
