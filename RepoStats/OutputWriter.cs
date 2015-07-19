@@ -14,7 +14,7 @@ namespace RepoStats
             string fileInfoChangesTableString = tableTemplate;
             StringBuilder trFileInfosContent = new StringBuilder();
 
-            foreach (GitFileInfo fileInfo in gitFileInfos.Values.OrderByDescending(c => (c.LinesDeleted + c.LinesAdded)))
+            foreach (GitFileInfo fileInfo in gitFileInfos.Values.OrderByDescending(c => (c.LinesDeleted + c.LinesAdded)).Take(20))
             {
                 trFileInfosContent.AppendFormat(
                     trTemplate, 
@@ -37,7 +37,7 @@ namespace RepoStats
             string committerInfoTableString = tableTemplate;
             StringBuilder trCommitterInfosContent = new StringBuilder();
 
-            foreach (GitCommitterInfo committerInfo in gitComitterInfos.Values.OrderByDescending(c => (c.LinesDeleted + c.LinesAdded)))
+            foreach (GitCommitterInfo committerInfo in gitComitterInfos.Values.OrderByDescending(c => (c.LinesDeleted + c.LinesAdded)).Take(20))
             {
                 trCommitterInfosContent.AppendFormat(
                     trTemplate,
