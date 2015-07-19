@@ -64,11 +64,11 @@ namespace RepoStats
                     Console.WriteLine();
                 }
 
-                FindHotFilesAndCommitters(repoRoot);
+                FindHotFilesAndCommitters(repoRoot, DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
             }
         }
 
-        static void FindHotFilesAndCommitters(string repoRoot)
+        static void FindHotFilesAndCommitters(string repoRoot, DateTime startDate, DateTime endDate)
         {
             Dictionary<string, GitFileInfo> gitFileInfos = new Dictionary<string, GitFileInfo>();
             Dictionary<string, GitCommitterInfo> gitComitterInfos = new Dictionary<string, GitCommitterInfo>();
@@ -82,6 +82,11 @@ namespace RepoStats
                     currentCommitCount++;
                     Console.Write("\rProcessing {0}/{1} ({2}%)    ", currentCommitCount, commitCount, currentCommitCount * 100 / commitCount);
                     
+                    if (!c.Author.When.IsWithin(startDate, endDate))
+                    {
+                        continue;
+                    }
+
                     // for each commit, look at the files modified.
                     if (c.Parents.Count() == 0)
                     {
@@ -167,6 +172,14 @@ namespace RepoStats
             }
 
             OutputWriter.OutputCheckinDetails(gitFileInfos, gitComitterInfos);
+        }
+    }
+
+    public static class Extensions
+    {
+        public static bool IsWithin(this DateTimeOffset obj, DateTime startDate, DateTime endDate)
+        {
+            return startDate <= obj && obj <= endDate;
         }
     }
 }
