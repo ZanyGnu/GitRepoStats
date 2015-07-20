@@ -1,4 +1,5 @@
 ﻿using LibGit2Sharp;
+using RepoStats.Analyzers;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -66,8 +67,8 @@ namespace RepoStats
 
                 //FindHotFilesAndCommitters(repoRoot, DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
 
-                List<CommitIterator.PatchAnalysis> patchAnalyzers = new List<CommitIterator.PatchAnalysis>();
-                CommitIterator.FileInfoAnalysis fileInfoAnalyzer = new CommitIterator.FileInfoAnalysis(DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
+                List<PatchAnalyzer> patchAnalyzers = new List<PatchAnalyzer>();
+                FileInfoAnalyzer fileInfoAnalyzer = new FileInfoAnalyzer(DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
                 patchAnalyzers.Add(fileInfoAnalyzer);
                 CommitIterator iterator = new CommitIterator(repoRoot, null, patchAnalyzers);
                 iterator.Iterate();

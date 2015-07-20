@@ -51,6 +51,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Analyzers\FileInfoAnalyzer.cs" />
+    <Compile Include="CommitAnalyzer.cs" />
     <Compile Include="CommitIterator.cs" />
     <Compile Include="OutputWriter.cs" />
     <Compile Include="Program.cs" />
