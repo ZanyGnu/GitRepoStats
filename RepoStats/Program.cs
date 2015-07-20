@@ -64,7 +64,27 @@ namespace RepoStats
                     Console.WriteLine();
                 }
 
-                FindHotFilesAndCommitters(repoRoot, DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
+                //FindHotFilesAndCommitters(repoRoot, DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
+
+                List<CommitIterator.PatchAnalysis> patchAnalyzers = new List<CommitIterator.PatchAnalysis>();
+                CommitIterator.FileInfoAnalysis fileInfoAnalyzer = new CommitIterator.FileInfoAnalysis(DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
+                patchAnalyzers.Add(fileInfoAnalyzer);
+                CommitIterator iterator = new CommitIterator(repoRoot, null, patchAnalyzers);
+                iterator.Iterate();
+
+                Console.WriteLine("Files ordered by number of modifications");
+                IOrderedEnumerable<GitFileInfo> orderedChanges = fileInfoAnalyzer.GitFileInfos.Values.OrderByDescending(c => c.LinesDeleted + c.LinesAdded);
+                foreach (GitFileInfo fileInfo in orderedChanges.Take(20))
+                {
+                    Console.WriteLine("\t{0} {1} {2}", fileInfo.Path, fileInfo.LinesAdded, fileInfo.LinesDeleted);
+                }
+
+                Console.WriteLine("Files ordered by number of commit touches");
+                orderedChanges = fileInfoAnalyzer.GitFileInfos.Values.OrderByDescending(c => c.NumberOfCommits);
+                foreach (GitFileInfo fileInfo in orderedChanges.Take(20))
+                {
+                    Console.WriteLine("\t{0} {1}", fileInfo.Path, fileInfo.NumberOfCommits);
+                }
             }
         }
 

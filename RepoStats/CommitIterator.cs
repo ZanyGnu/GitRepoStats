@@ -1,12 +1,11 @@
-﻿using LibGit2Sharp;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿
 namespace RepoStats
 {
+    using LibGit2Sharp;
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+
     public class CommitIterator
     {
         List<CommitAnalysis> commitAnalysis;
@@ -21,7 +20,7 @@ namespace RepoStats
 
         }
 
-        void RunThroughCommits()
+        public void Iterate()
         {
             using (var repo = new Repository(repoRoot))
             {
@@ -44,24 +43,33 @@ namespace RepoStats
 
         private static void ExecuteCommitAnalysis(Commit c, List<CommitAnalysis> commitAnalysis, List<PatchAnalysis> patchAnalysis)
         {
-            foreach (CommitAnalysis ca in commitAnalysis)
+            if (commitAnalysis != null)
             {
-                ca.Visit(c);
+                foreach (CommitAnalysis ca in commitAnalysis)
+                {
+                    ca.Visit(c);
+                }
             }
 
-            foreach (PatchAnalysis pa in patchAnalysis)
+            if (patchAnalysis != null)
             {
-                pa.Visit(c);
+                foreach (PatchAnalysis pa in patchAnalysis)
+                {
+                    pa.Visit(c);
+                }
             }
         }
 
         private static void ExecutePatchAnalysis(List<PatchAnalysis> patchAnalysis, Commit c, Patch changes)
         {
-            foreach (PatchEntryChanges patchEntryChanges in changes)
+            if (patchAnalysis != null)
             {
-                foreach (PatchAnalysis pa in patchAnalysis)
+                foreach (PatchEntryChanges patchEntryChanges in changes)
                 {
-                    pa.Visit(c, patchEntryChanges);
+                    foreach (PatchAnalysis pa in patchAnalysis)
+                    {
+                        pa.Visit(c, patchEntryChanges);
+                    }
                 }
             }
         }
@@ -77,14 +85,40 @@ namespace RepoStats
 
         public class FileInfoAnalysis : PatchAnalysis
         {
-            public void Visit(Commit c)
-            {
+            public Dictionary<string, GitFileInfo> GitFileInfos = new Dictionary<string, GitFileInfo>();
 
+            DateTime startDate;
+            DateTime endDate;
+
+            public FileInfoAnalysis (DateTime startDate, DateTime endDate)
+            {
+                this.startDate = startDate;
+                this.endDate = endDate;
             }
 
-            public void Visit(Commit commit, PatchEntryChanges patch)
+            public void Visit(Commit c)
             {
+                
+            }
 
+            public void Visit(Commit commit, PatchEntryChanges patchEntryChanges)
+            {
+                if (!GitFileInfos.ContainsKey(patchEntryChanges.Path))
+                {
+                    GitFileInfos.Add(
+                        patchEntryChanges.Path,
+                        new GitFileInfo()
+                        {
+                            Path = patchEntryChanges.Path,
+                            LinesAdded = 0,
+                            LinesDeleted = 0,
+                            NumberOfCommits = 0
+                        });
+                }
+
+                GitFileInfos[patchEntryChanges.Path].LinesAdded += patchEntryChanges.LinesAdded;
+                GitFileInfos[patchEntryChanges.Path].LinesDeleted += patchEntryChanges.LinesDeleted;
+                GitFileInfos[patchEntryChanges.Path].NumberOfCommits++;
             }
         }
     }
