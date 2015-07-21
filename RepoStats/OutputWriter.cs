@@ -7,14 +7,16 @@ using System.Threading.Tasks;
 
 namespace RepoStats
 {
+    using Analyzers;
+
     class OutputWriter
     {
-        public static void OutputCheckinDetails(Dictionary<string, GitFileInfo> gitFileInfos, Dictionary<string, GitCommitterInfo> gitComitterInfos)
+        public static void OutputCheckinDetails(Dictionary<string, FileInfoAnalyzer.GitFileInfo> gitFileInfos, Dictionary<string, CommitterInfoAnalyzer.GitCommitterInfo> gitComitterInfos)
         {
             string fileInfoChangesTableString = tableTemplate;
             StringBuilder trFileInfosContent = new StringBuilder();
 
-            foreach (GitFileInfo fileInfo in gitFileInfos.Values.OrderByDescending(c => (c.LinesDeleted + c.LinesAdded)).Take(20))
+            foreach (FileInfoAnalyzer.GitFileInfo fileInfo in gitFileInfos.Values.OrderByDescending(c => (c.LinesDeleted + c.LinesAdded)).Take(20))
             {
                 trFileInfosContent.AppendFormat(
                     trTemplate, 
@@ -37,7 +39,7 @@ namespace RepoStats
             string committerInfoTableString = tableTemplate;
             StringBuilder trCommitterInfosContent = new StringBuilder();
 
-            foreach (GitCommitterInfo committerInfo in gitComitterInfos.Values.OrderByDescending(c => (c.LinesDeleted + c.LinesAdded)).Take(20))
+            foreach (CommitterInfoAnalyzer.GitCommitterInfo committerInfo in gitComitterInfos.Values.OrderByDescending(c => (c.LinesDeleted + c.LinesAdded)).Take(20))
             {
                 trCommitterInfosContent.AppendFormat(
                     trTemplate,

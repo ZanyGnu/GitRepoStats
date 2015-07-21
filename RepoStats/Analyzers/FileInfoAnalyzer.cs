@@ -9,6 +9,14 @@ namespace RepoStats.Analyzers
 {
     public class FileInfoAnalyzer : PatchAnalyzer
     {
+        public class GitFileInfo
+        {
+            public string Path { get; set; }
+            public int NumberOfCommits { get; set; }
+            public int LinesAdded { get; set; }
+            public int LinesDeleted { get; set; }
+        }
+
         public Dictionary<string, GitFileInfo> GitFileInfos = new Dictionary<string, GitFileInfo>();
 
         DateTime startDate;

@@ -11,23 +11,7 @@ using System.Threading.Tasks;
 
 namespace RepoStats
 {
-    public class GitFileInfo
-    {
-        public string Path { get; set; }
-        public int NumberOfCommits { get; set; }
-        public int LinesAdded { get; set; }
-        public int LinesDeleted { get; set; }
-    }
-
-    public class GitCommitterInfo
-    {
-        public string Author { get; set; }
-        public int NumberOfCommits { get; set; }
-        public int LinesAdded { get; set; }
-        public int LinesDeleted { get; set; }
-    }
-
-    public class Program
+     public class Program
     {
         
         static void Main(string[] args)
@@ -74,15 +58,15 @@ namespace RepoStats
                 iterator.Iterate();
 
                 Console.WriteLine("Files ordered by number of modifications");
-                IOrderedEnumerable<GitFileInfo> orderedChanges = fileInfoAnalyzer.GitFileInfos.Values.OrderByDescending(c => c.LinesDeleted + c.LinesAdded);
-                foreach (GitFileInfo fileInfo in orderedChanges.Take(20))
+                IOrderedEnumerable<FileInfoAnalyzer.GitFileInfo> orderedChanges = fileInfoAnalyzer.GitFileInfos.Values.OrderByDescending(c => c.LinesDeleted + c.LinesAdded);
+                foreach (FileInfoAnalyzer.GitFileInfo fileInfo in orderedChanges.Take(20))
                 {
                     Console.WriteLine("\t{0} {1} {2}", fileInfo.Path, fileInfo.LinesAdded, fileInfo.LinesDeleted);
                 }
 
                 Console.WriteLine("Files ordered by number of commit touches");
                 orderedChanges = fileInfoAnalyzer.GitFileInfos.Values.OrderByDescending(c => c.NumberOfCommits);
-                foreach (GitFileInfo fileInfo in orderedChanges.Take(20))
+                foreach (FileInfoAnalyzer.GitFileInfo fileInfo in orderedChanges.Take(20))
                 {
                     Console.WriteLine("\t{0} {1}", fileInfo.Path, fileInfo.NumberOfCommits);
                 }
@@ -91,8 +75,8 @@ namespace RepoStats
 
         static void FindHotFilesAndCommitters(string repoRoot, DateTime startDate, DateTime endDate)
         {
-            Dictionary<string, GitFileInfo> gitFileInfos = new Dictionary<string, GitFileInfo>();
-            Dictionary<string, GitCommitterInfo> gitComitterInfos = new Dictionary<string, GitCommitterInfo>();
+            Dictionary<string, FileInfoAnalyzer.GitFileInfo> gitFileInfos = new Dictionary<string, FileInfoAnalyzer.GitFileInfo>();
+            Dictionary<string, CommitterInfoAnalyzer.GitCommitterInfo> gitComitterInfos = new Dictionary<string, CommitterInfoAnalyzer.GitCommitterInfo>();
 
             using (var repo = new Repository(repoRoot))
             {
@@ -116,7 +100,7 @@ namespace RepoStats
 
                     if (!gitComitterInfos.ContainsKey(c.Committer.Name))
                     {
-                        gitComitterInfos.Add(c.Committer.Name, new GitCommitterInfo()
+                        gitComitterInfos.Add(c.Committer.Name, new CommitterInfoAnalyzer.GitCommitterInfo()
                         {
                             Author = c.Committer.Name,
                             LinesAdded = 0,
@@ -143,7 +127,7 @@ namespace RepoStats
                         {
                             gitFileInfos.Add(
                                 patchEntryChanges.Path,
-                                new GitFileInfo()
+                                new FileInfoAnalyzer.GitFileInfo()
                                 {
                                     Path = patchEntryChanges.Path,
                                     LinesAdded = 0,
@@ -165,29 +149,29 @@ namespace RepoStats
             }
 
             Console.WriteLine("Files ordered by number of modifications");
-            IOrderedEnumerable<GitFileInfo> orderedChanges = gitFileInfos.Values.OrderByDescending(c => c.LinesDeleted + c.LinesAdded);
-            foreach(GitFileInfo fileInfo in orderedChanges.Take(20))
+            IOrderedEnumerable<FileInfoAnalyzer.GitFileInfo> orderedChanges = gitFileInfos.Values.OrderByDescending(c => c.LinesDeleted + c.LinesAdded);
+            foreach(FileInfoAnalyzer.GitFileInfo fileInfo in orderedChanges.Take(20))
             {
                 Console.WriteLine("\t{0} {1} {2}", fileInfo.Path, fileInfo.LinesAdded, fileInfo.LinesDeleted);
             }
 
             Console.WriteLine("Files ordered by number of commit touches");
             orderedChanges = gitFileInfos.Values.OrderByDescending(c => c.NumberOfCommits);
-            foreach (GitFileInfo fileInfo in orderedChanges.Take(20))
+            foreach (FileInfoAnalyzer.GitFileInfo fileInfo in orderedChanges.Take(20))
             {
                 Console.WriteLine("\t{0} {1}", fileInfo.Path, fileInfo.NumberOfCommits);
             }
 
             Console.WriteLine("Committers ordered by number of modifications");
-            IOrderedEnumerable<GitCommitterInfo> orderedChangesByCommitters = gitComitterInfos.Values.OrderByDescending(c => c.LinesDeleted + c.LinesAdded);
-            foreach (GitCommitterInfo committerInfo in orderedChangesByCommitters.Take(20))
+            IOrderedEnumerable<CommitterInfoAnalyzer.GitCommitterInfo> orderedChangesByCommitters = gitComitterInfos.Values.OrderByDescending(c => c.LinesDeleted + c.LinesAdded);
+            foreach (CommitterInfoAnalyzer.GitCommitterInfo committerInfo in orderedChangesByCommitters.Take(20))
             {
                 Console.WriteLine("\t{0} {1} {2}", committerInfo.Author, committerInfo.LinesAdded, committerInfo.LinesDeleted);
             }
 
             Console.WriteLine("Committers ordered by number of commit touches");
             orderedChangesByCommitters = gitComitterInfos.Values.OrderByDescending(c => c.NumberOfCommits);
-            foreach (GitCommitterInfo committerInfo in orderedChangesByCommitters.Take(20))
+            foreach (CommitterInfoAnalyzer.GitCommitterInfo committerInfo in orderedChangesByCommitters.Take(20))
             {
                 Console.WriteLine("\t{0} {1}", committerInfo.Author, committerInfo.NumberOfCommits);
             }
