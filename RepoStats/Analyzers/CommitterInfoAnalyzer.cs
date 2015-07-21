@@ -49,5 +49,23 @@ namespace RepoStats.Analyzers
             GitComitterInfos[commit.Committer.Name].LinesAdded += patchEntryChanges.LinesAdded;
             GitComitterInfos[commit.Committer.Name].LinesDeleted += patchEntryChanges.LinesDeleted;
         }
+
+        public void Write()
+        {
+
+            Console.WriteLine("Committers ordered by number of modifications");
+            IOrderedEnumerable<CommitterInfoAnalyzer.GitCommitterInfo> orderedChangesByCommitters = GitComitterInfos.Values.OrderByDescending(c => c.LinesDeleted + c.LinesAdded);
+            foreach (CommitterInfoAnalyzer.GitCommitterInfo committerInfo in orderedChangesByCommitters.Take(20))
+            {
+                Console.WriteLine("\t{0} {1} {2}", committerInfo.Author, committerInfo.LinesAdded, committerInfo.LinesDeleted);
+            }
+
+            Console.WriteLine("Committers ordered by number of commit touches");
+            orderedChangesByCommitters = GitComitterInfos.Values.OrderByDescending(c => c.NumberOfCommits);
+            foreach (CommitterInfoAnalyzer.GitCommitterInfo committerInfo in orderedChangesByCommitters.Take(20))
+            {
+                Console.WriteLine("\t{0} {1}", committerInfo.Author, committerInfo.NumberOfCommits);
+            }
+        }
     }
 }

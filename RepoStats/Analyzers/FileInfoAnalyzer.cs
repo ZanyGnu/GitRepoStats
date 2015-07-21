@@ -52,5 +52,22 @@ namespace RepoStats.Analyzers
             GitFileInfos[patchEntryChanges.Path].LinesDeleted += patchEntryChanges.LinesDeleted;
             GitFileInfos[patchEntryChanges.Path].NumberOfCommits++;
         }
+
+        public void Write()
+        {
+            Console.WriteLine("Files ordered by number of modifications");
+            IOrderedEnumerable<FileInfoAnalyzer.GitFileInfo> orderedChanges = GitFileInfos.Values.OrderByDescending(c => c.LinesDeleted + c.LinesAdded);
+            foreach (FileInfoAnalyzer.GitFileInfo fileInfo in orderedChanges.Take(20))
+            {
+                Console.WriteLine("\t{0} {1} {2}", fileInfo.Path, fileInfo.LinesAdded, fileInfo.LinesDeleted);
+            }
+
+            Console.WriteLine("Files ordered by number of commit touches");
+            orderedChanges = GitFileInfos.Values.OrderByDescending(c => c.NumberOfCommits);
+            foreach (FileInfoAnalyzer.GitFileInfo fileInfo in orderedChanges.Take(20))
+            {
+                Console.WriteLine("\t{0} {1}", fileInfo.Path, fileInfo.NumberOfCommits);
+            }
+        }
     }
 }

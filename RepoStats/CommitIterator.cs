@@ -2,7 +2,6 @@
 namespace RepoStats
 {
     using LibGit2Sharp;
-    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -37,6 +36,25 @@ namespace RepoStats
                     Patch changes = repo.Diff.Compare<Patch>(c.Tree, c.Parents.First().Tree);
 
                     ExecutePatchAnalysis(patchAnalysis, c, changes);
+                }
+            }
+        }
+
+        public void WriteOutput()
+        {
+            if (commitAnalysis != null)
+            {
+                foreach (CommitAnalyzer ca in commitAnalysis)
+                {
+                    ca.Write();
+                }
+            }
+
+            if (patchAnalysis != null)
+            {
+                foreach (PatchAnalyzer pa in patchAnalysis)
+                {
+                    pa.Write();
                 }
             }
         }

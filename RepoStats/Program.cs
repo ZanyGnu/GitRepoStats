@@ -54,22 +54,13 @@ namespace RepoStats
                 List<PatchAnalyzer> patchAnalyzers = new List<PatchAnalyzer>();
                 FileInfoAnalyzer fileInfoAnalyzer = new FileInfoAnalyzer(DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
                 patchAnalyzers.Add(fileInfoAnalyzer);
+
+                CommitterInfoAnalyzer committerInfoAnalyzer = new CommitterInfoAnalyzer(DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
+                patchAnalyzers.Add(committerInfoAnalyzer);
+
                 CommitIterator iterator = new CommitIterator(repoRoot, null, patchAnalyzers);
                 iterator.Iterate();
-
-                Console.WriteLine("Files ordered by number of modifications");
-                IOrderedEnumerable<FileInfoAnalyzer.GitFileInfo> orderedChanges = fileInfoAnalyzer.GitFileInfos.Values.OrderByDescending(c => c.LinesDeleted + c.LinesAdded);
-                foreach (FileInfoAnalyzer.GitFileInfo fileInfo in orderedChanges.Take(20))
-                {
-                    Console.WriteLine("\t{0} {1} {2}", fileInfo.Path, fileInfo.LinesAdded, fileInfo.LinesDeleted);
-                }
-
-                Console.WriteLine("Files ordered by number of commit touches");
-                orderedChanges = fileInfoAnalyzer.GitFileInfos.Values.OrderByDescending(c => c.NumberOfCommits);
-                foreach (FileInfoAnalyzer.GitFileInfo fileInfo in orderedChanges.Take(20))
-                {
-                    Console.WriteLine("\t{0} {1}", fileInfo.Path, fileInfo.NumberOfCommits);
-                }
+                iterator.WriteOutput();
             }
         }
 
