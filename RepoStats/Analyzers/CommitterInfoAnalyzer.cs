@@ -52,7 +52,6 @@ namespace RepoStats.Analyzers
 
         public void Write()
         {
-
             Console.WriteLine("Committers ordered by number of modifications");
             IOrderedEnumerable<CommitterInfoAnalyzer.GitCommitterInfo> orderedChangesByCommitters = GitComitterInfos.Values.OrderByDescending(c => c.LinesDeleted + c.LinesAdded);
             foreach (CommitterInfoAnalyzer.GitCommitterInfo committerInfo in orderedChangesByCommitters.Take(20))

@@ -2,6 +2,7 @@
 namespace RepoStats
 {
     using LibGit2Sharp;
+    using System;
     using System.Collections.Generic;
     using System.Linq;
 
@@ -23,8 +24,14 @@ namespace RepoStats
         {
             using (var repo = new Repository(repoRoot))
             {
+                int commitCount = repo.Commits.Count();
+                int currentCommitCount = 0;
+
                 foreach (Commit c in repo.Commits)
                 {
+                    currentCommitCount++;
+                    Console.Write("\rProcessing {0}/{1} ({2}%)    ", currentCommitCount, commitCount, currentCommitCount * 100 / commitCount);
+
                     ExecuteCommitAnalysis(c, commitAnalysis, patchAnalysis);
 
                     if (c.Parents.Count() == 0)
