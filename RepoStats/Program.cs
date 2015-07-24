@@ -58,6 +58,9 @@ namespace RepoStats
                 CommitterInfoAnalyzer committerInfoAnalyzer = new CommitterInfoAnalyzer(DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
                 patchAnalyzers.Add(committerInfoAnalyzer);
 
+                CommitTrendAnalyzer trendAnalyzer = new CommitTrendAnalyzer();
+                patchAnalyzers.Add(trendAnalyzer);
+
                 CommitIterator iterator = new CommitIterator(repoRoot, null, patchAnalyzers);
                 iterator.Iterate();
                 iterator.WriteOutput();
@@ -171,7 +174,7 @@ namespace RepoStats
         }
     }
 
-    public static class Extensions
+    public static partial class Extensions
     {
         public static bool IsWithin(this DateTimeOffset obj, DateTime startDate, DateTime endDate)
         {
