@@ -42,5 +42,10 @@ namespace RepoStats.Analyzers
                     new String('*', (int)((currentTotalCount * 100)/ totalLineCount)));
             }
         }
+
+        public string GetFormattedString()
+        {
+            return HtmlTemplates.SvgContribution.SVGTemplatePre;
+        }
     }
 }

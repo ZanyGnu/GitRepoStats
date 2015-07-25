@@ -16,5 +16,7 @@ namespace RepoStats
     public interface IOutputWriter
     {
         void Write();
+
+        string GetFormattedString();
     }
 }

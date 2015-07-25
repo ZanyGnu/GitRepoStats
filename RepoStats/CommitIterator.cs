@@ -4,6 +4,7 @@ namespace RepoStats
     using LibGit2Sharp;
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
 
     public class CommitIterator
@@ -49,11 +50,13 @@ namespace RepoStats
 
         public void WriteOutput()
         {
+            string htmlData = "";
             if (commitAnalysis != null)
             {
                 foreach (CommitAnalyzer ca in commitAnalysis)
                 {
                     ca.Write();
+                    htmlData += ca.GetFormattedString();
                 }
             }
 
@@ -62,8 +65,15 @@ namespace RepoStats
                 foreach (PatchAnalyzer pa in patchAnalysis)
                 {
                     pa.Write();
+                    htmlData += pa.GetFormattedString();
                 }
             }
+
+            File.WriteAllText("report.html",
+                String.Concat(
+                    HtmlTemplates.HtmlPreTemplate,
+                    htmlData,
+                    HtmlTemplates.HtmlPostTemplate));
         }
 
         private static void ExecuteCommitAnalysis(Commit c, List<CommitAnalyzer> commitAnalysis, List<PatchAnalyzer> patchAnalysis)

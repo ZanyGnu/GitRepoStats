@@ -69,5 +69,32 @@ namespace RepoStats.Analyzers
                 Console.WriteLine("\t{0} {1}", fileInfo.Path, fileInfo.NumberOfCommits);
             }
         }
+
+        public string GetFormattedString()
+        {
+            string fileInfoChangesTableString = HtmlTemplates.Table.TableTemplate;
+            StringBuilder trFileInfosContent = new StringBuilder();
+
+            foreach (FileInfoAnalyzer.GitFileInfo fileInfo in GitFileInfos.Values.OrderByDescending(c => (c.LinesDeleted + c.LinesAdded)).Take(20))
+            {
+                trFileInfosContent.AppendFormat(
+                    HtmlTemplates.Table.trTemplate,
+                    fileInfo.LinesAdded,
+                    fileInfo.LinesDeleted,
+                    fileInfo.NumberOfCommits,
+                    fileInfo.Path);
+            }
+
+            fileInfoChangesTableString = String.Format(
+                fileInfoChangesTableString
+                    .Replace("{0}", "%0%")
+                    .Replace("{1}", "%1%")
+                    .Replace("{", "{{")
+                    .Replace("}", "}}")
+                    .Replace("%0%", "{0}")
+                    .Replace("%1%", "{1}"), trFileInfosContent);
+
+            return fileInfoChangesTableString;
+        }
     }
 }

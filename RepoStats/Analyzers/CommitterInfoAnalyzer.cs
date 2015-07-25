@@ -66,5 +66,32 @@ namespace RepoStats.Analyzers
                 Console.WriteLine("\t{0} {1}", committerInfo.Author, committerInfo.NumberOfCommits);
             }
         }
+
+        public string GetFormattedString()
+        {
+            string committerInfoTableString = HtmlTemplates.Table.TableTemplate;
+            StringBuilder trCommitterInfosContent = new StringBuilder();
+
+            foreach (CommitterInfoAnalyzer.GitCommitterInfo committerInfo in GitComitterInfos.Values.OrderByDescending(c => (c.LinesDeleted + c.LinesAdded)).Take(20))
+            {
+                trCommitterInfosContent.AppendFormat(
+                    HtmlTemplates.Table.trTemplate,
+                    committerInfo.LinesAdded,
+                    committerInfo.LinesDeleted,
+                    committerInfo.NumberOfCommits,
+                    committerInfo.Author);
+            }
+
+            committerInfoTableString = String.Format(
+                committerInfoTableString
+                    .Replace("{0}", "%0%")
+                    .Replace("{1}", "%1%")
+                    .Replace("{", "{{")
+                    .Replace("}", "}}")
+                    .Replace("%0%", "{0}")
+                    .Replace("%1%", "{1}"), trCommitterInfosContent);
+
+            return committerInfoTableString;
+        }
     }
 }
