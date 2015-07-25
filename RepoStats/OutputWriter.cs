@@ -11,15 +11,17 @@ namespace RepoStats
 
     class OutputWriter
     {
-        public static void OutputCheckinDetails(Dictionary<string, FileInfoAnalyzer.GitFileInfo> gitFileInfos, Dictionary<string, CommitterInfoAnalyzer.GitCommitterInfo> gitComitterInfos)
+        public static void OutputCheckinDetails(
+            Dictionary<string, FileInfoAnalyzer.GitFileInfo> gitFileInfos, 
+            Dictionary<string, CommitterInfoAnalyzer.GitCommitterInfo> gitComitterInfos)
         {
-            string fileInfoChangesTableString = tableTemplate;
+            string fileInfoChangesTableString = HtmlTemplates.Table.TableTemplate;
             StringBuilder trFileInfosContent = new StringBuilder();
 
             foreach (FileInfoAnalyzer.GitFileInfo fileInfo in gitFileInfos.Values.OrderByDescending(c => (c.LinesDeleted + c.LinesAdded)).Take(20))
             {
                 trFileInfosContent.AppendFormat(
-                    trTemplate, 
+                    HtmlTemplates.Table.trTemplate, 
                     fileInfo.LinesAdded, 
                     fileInfo.LinesDeleted, 
                     fileInfo.NumberOfCommits,
@@ -36,13 +38,13 @@ namespace RepoStats
                     .Replace("%1%", "{1}"), trFileInfosContent);
 
 
-            string committerInfoTableString = tableTemplate;
+            string committerInfoTableString = HtmlTemplates.Table.TableTemplate;
             StringBuilder trCommitterInfosContent = new StringBuilder();
 
             foreach (CommitterInfoAnalyzer.GitCommitterInfo committerInfo in gitComitterInfos.Values.OrderByDescending(c => (c.LinesDeleted + c.LinesAdded)).Take(20))
             {
                 trCommitterInfosContent.AppendFormat(
-                    trTemplate,
+                    HtmlTemplates.Table.trTemplate,
                     committerInfo.LinesAdded,
                     committerInfo.LinesDeleted,
                     committerInfo.NumberOfCommits,
@@ -67,61 +69,6 @@ namespace RepoStats
                     htmlPostTemplate));
         }
 
-        private static string trTemplate = @" <tr>
-              <td valign=top style='width:50pt;border:solid #BDD6EE 1.0pt;
-              border-top:none;padding:0in 5.4pt 0in 5.4pt'>
-              <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'>{0}</p>
-              </td>
-              <td valign=top style='width:50pt;border-top:none;border-left:
-              none;border-bottom:solid #BDD6EE 1.0pt;border-right:solid #BDD6EE 1.0pt;
-              padding:0in 5.4pt 0in 5.4pt'>
-              <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'>{1}</p>
-              </td>
-              <td valign=top style='width:100pt;border-top:none;border-left:
-              none;border-bottom:solid #BDD6EE 1.0pt;border-right:solid #BDD6EE 1.0pt;
-              padding:0in 5.4pt 0in 5.4pt'>
-              <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'>{2}</p>
-              </td>
-              <td valign=top style='width:500pt;border-top:none;border-left:
-              none;border-bottom:solid #BDD6EE 1.0pt;border-right:solid #BDD6EE 1.0pt;
-              padding:0in 5.4pt 0in 5.4pt'>
-              <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'>{3}</p>
-              </td>
-             </tr>";
-
-        private static string tableTemplate = @"
-            <table class=MsoTable15Grid4Accent2 border=1 cellspacing=0 cellpadding=0
-             style='border-collapse:collapse;border:none'>
-             <tr style='height:12.75pt'>
-              <td valign=top style='width:50pt;border:solid #ED7D31 1.0pt;
-              border-right:none;background:#C00000;padding:0in 5.4pt 0in 5.4pt;height:12.75pt'>
-              <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'><b><span style='color:white'>Lines Added</span></b></p>
-              </td>
-              <td valign=top style='width:50pt;border-top:solid #ED7D31 1.0pt;
-              border-left:none;border-bottom:solid #ED7D31 1.0pt;border-right:none;
-              background:#C00000;padding:0in 5.4pt 0in 5.4pt;height:12.75pt'>
-              <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'><b><span style='color:white'>Lines Removed</span></b></p>
-              </td>
-              <td valign=top style='width:100pt;border-top:solid #ED7D31 1.0pt;
-              border-left:none;border-bottom:solid #ED7D31 1.0pt;border-right:none;
-              background:#C00000;padding:0in 5.4pt 0in 5.4pt;height:12.75pt'>
-              <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'><b><span style='color:white'>Number of commits</span></b></p>
-              </td>
-              <td valign=top style='width:500pt;border:solid #ED7D31 1.0pt;
-              border-left:none;background:#C00000;padding:0in 5.4pt 0in 5.4pt;height:12.75pt'>
-              <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'><b><span style='color:white'>File Path</span></b></p>
-              </td>
-             </tr>
-             {0}
-            </table>";
 
         private static string htmlPreTemplate = @"<html>
 
@@ -193,7 +140,15 @@ namespace RepoStats
 
             ";
 
-        private static string tableFillerTemplate = @"
+        private static string htmlPostTemplate = @"
+            <br><br><hr><br>
+            </div>
+
+            </body>
+
+            </html>";
+
+        public static string tableFillerTemplate = @"
         
             <p class=MsoNormal>&nbsp;</p>
             <br><br><br><hr><br><br>
@@ -206,13 +161,5 @@ namespace RepoStats
             <p class=MsoNormal>&nbsp;</p>
 
             <p class=MsoNormal>&nbsp;</p>";
-
-        private static string htmlPostTemplate = @"
-            <br><br><hr><br>
-            </div>
-
-            </body>
-
-            </html>";
     }
 }
