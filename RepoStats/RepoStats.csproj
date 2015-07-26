@@ -54,6 +54,7 @@
     <Compile Include="Analyzers\CommitterInfoAnalyzer.cs" />
     <Compile Include="Analyzers\CommitTrendAnalyzer.cs" />
     <Compile Include="Analyzers\FileInfoAnalyzer.cs" />
+    <Compile Include="Analyzers\LinesOfCodeTrendAnalyzer.cs" />
     <Compile Include="CommitAnalyzer.cs" />
     <Compile Include="CommitIterator.cs" />
     <Compile Include="Extensions.cs" />

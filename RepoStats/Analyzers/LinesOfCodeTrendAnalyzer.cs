@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace RepoStats.Analyzers
 {
-    class LinesOfCodeTrendAnalyzer
+    class LinesOfCodeTrendAnalyzer: PatchAnalyzer
     {
         Dictionary<DateTime, long> lineCountByDate = new Dictionary<DateTime, long>();
         long totalLineCount = 0;

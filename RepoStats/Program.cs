@@ -52,14 +52,11 @@ namespace RepoStats
                 //FindHotFilesAndCommitters(repoRoot, DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
 
                 List<PatchAnalyzer> patchAnalyzers = new List<PatchAnalyzer>();
-                FileInfoAnalyzer fileInfoAnalyzer = new FileInfoAnalyzer(DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
-                patchAnalyzers.Add(fileInfoAnalyzer);
 
-                CommitterInfoAnalyzer committerInfoAnalyzer = new CommitterInfoAnalyzer(DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
-                patchAnalyzers.Add(committerInfoAnalyzer);
-
-                CommitTrendAnalyzer trendAnalyzer = new CommitTrendAnalyzer();
-                patchAnalyzers.Add(trendAnalyzer);
+                patchAnalyzers.Add(new FileInfoAnalyzer(DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now));
+                patchAnalyzers.Add(new CommitterInfoAnalyzer(DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now));
+                patchAnalyzers.Add(new CommitTrendAnalyzer());
+                patchAnalyzers.Add(new LinesOfCodeTrendAnalyzer());
 
                 CommitIterator iterator = new CommitIterator(repoRoot, null, patchAnalyzers);
                 iterator.Iterate();
