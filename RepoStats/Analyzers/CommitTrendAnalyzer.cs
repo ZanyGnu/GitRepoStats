@@ -1,9 +1,10 @@
 ﻿
 namespace RepoStats.Analyzers
 {
+    using LibGit2Sharp;
+
     using System;
     using System.Collections.Generic;
-    using LibGit2Sharp;
     using System.Linq;
     using System.Text;
 
