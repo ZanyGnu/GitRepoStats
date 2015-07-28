@@ -90,7 +90,9 @@ namespace RepoStats.Analyzers
                     .Replace("{", "{{")
                     .Replace("}", "}}")
                     .Replace("%0%", "{0}")
-                    .Replace("%1%", "{1}"), trCommitterInfosContent);
+                    .Replace("%1%", "{1}"), 
+                "Committer Info",
+                trCommitterInfosContent);
 
             return committerInfoTableString;
         }

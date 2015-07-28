@@ -63,14 +63,6 @@ namespace RepoStats
             </style>
 
             </head>
-
-            <div class=WordSection1>
-
-            <p class=MsoNormal>
-            <h1>Repo report</h1>
-            <br>
-            </p>
-
             ";
 
         public static string HtmlPostTemplate = @"
@@ -124,6 +116,7 @@ namespace RepoStats
              </tr>";
 
             public static string TableTemplate = @"
+            <h2>{0}</h2>
             <table class=MsoTable15Grid4Accent2 border=1 cellspacing=0 cellpadding=0
              style='border-collapse:collapse;border:none'>
              <tr style='height:12.75pt'>
@@ -150,7 +143,7 @@ namespace RepoStats
               normal'><b><span style='color:white'>File Path</span></b></p>
               </td>
              </tr>
-             {0}
+             {1}
             </table>";
         }
 

@@ -93,7 +93,9 @@ namespace RepoStats.Analyzers
                     .Replace("{", "{{")
                     .Replace("}", "}}")
                     .Replace("%0%", "{0}")
-                    .Replace("%1%", "{1}"), trFileInfosContent);
+                    .Replace("%1%", "{1}"), 
+                "Hot files",
+                trFileInfosContent);
 
             return fileInfoChangesTableString;
         }
