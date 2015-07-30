@@ -116,7 +116,7 @@ namespace RepoStats
              </tr>";
 
             public static string TableTemplate = @"
-            <h2>{0}</h2>
+            <h1>{0}</h1><br>
             <table class=MsoTable15Grid4Accent2 border=1 cellspacing=0 cellpadding=0
              style='border-collapse:collapse;border:none'>
              <tr style='height:12.75pt'>
@@ -144,12 +144,14 @@ namespace RepoStats
               </td>
              </tr>
              {1}
-            </table>";
+            </table>
+            <br>";
         }
 
         public static class SvgContribution
         {
             public static string SVGTemplatePre = @"
+            <h1>Contributions</h1><br>
             <svg width = '721' height='110'>
                 <g transform = 'translate(20, 20)' >";
 
