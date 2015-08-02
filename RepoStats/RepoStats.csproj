@@ -52,7 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Analyzers\CommitterInfoAnalyzer.cs" />
-    <Compile Include="Analyzers\UserCommitTrendAnalyzer.cs" />
+    <Compile Include="Analyzers\AuthorCommitTrendAnalyzer.cs" />
     <Compile Include="Analyzers\CommitTrendAnalyzer.cs" />
     <Compile Include="Analyzers\FileInfoAnalyzer.cs" />
     <Compile Include="Analyzers\LinesOfCodeTrendAnalyzer.cs" />
