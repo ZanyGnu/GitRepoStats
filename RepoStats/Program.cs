@@ -56,6 +56,7 @@ namespace RepoStats
                 patchAnalyzers.Add(new CommitterInfoAnalyzer(DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now));
                 patchAnalyzers.Add(new CommitTrendAnalyzer());
                 patchAnalyzers.Add(new LinesOfCodeTrendAnalyzer());
+                patchAnalyzers.Add(new AuthorCommitTrendAnalyzer());
 
                 CommitIterator iterator = new CommitIterator(repoRoot, null, patchAnalyzers);
                 iterator.Iterate();
