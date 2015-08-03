@@ -55,7 +55,7 @@ namespace RepoStats.Analyzers
         {
             StringBuilder returnString = new StringBuilder();
             int count = 0;
-            string contributionLinkTemplate = "<br><a href='{0}'>{1}</a>";
+            string contributionLinkTemplate = "<br><a href='{0}'>{1} ({2})</a>";
             foreach (KeyValuePair<Signature, Dictionary<DateTime, long>> entry in this.commitCountByDate.OrderByDescending(c => c.Value.Values.Aggregate((a,b) => a + b)))
             {
                 string fileName = "contributions\\" + entry.Key.Name + ".html";
@@ -69,7 +69,8 @@ namespace RepoStats.Analyzers
 
                 if (count++ < 20)
                 {
-                    returnString.AppendFormat(contributionLinkTemplate, fileName, entry.Key.Name);
+                    long commitCount = entry.Value.Values.Aggregate((a, b) => a + b);
+                    returnString.AppendFormat(contributionLinkTemplate, fileName, entry.Key.Name, commitCount);
                 }
 
             }
