@@ -41,7 +41,8 @@ namespace RepoStats
                     }
 
                     // TODO: need to handle multiple parents.
-                    Patch changes = repo.Diff.Compare<Patch>(c.Tree, c.Parents.First().Tree);
+                    Patch changes = null;
+                    changes = repo.Diff.Compare<Patch>(c.Tree, c.Parents.First().Tree);
 
                     ExecutePatchAnalysis(patchAnalysis, c, changes);
                 }
@@ -97,7 +98,7 @@ namespace RepoStats
 
         private static void ExecutePatchAnalysis(List<PatchAnalyzer> patchAnalysis, Commit c, Patch changes)
         {
-            if (patchAnalysis != null)
+            if (patchAnalysis != null && changes != null)
             {
                 foreach (PatchEntryChanges patchEntryChanges in changes)
                 {
