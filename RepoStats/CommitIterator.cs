@@ -6,9 +6,17 @@ namespace RepoStats
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Xml.Serialization;
 
     public class CommitIterator
     {
+        public class FileChanges
+        {
+            public string Path;
+            public int LinesAdded;
+            public int LinesRemoved;
+        }
+
         List<CommitAnalyzer> commitAnalysis;
         List<PatchAnalyzer> patchAnalysis;
         string repoRoot;
@@ -40,9 +48,27 @@ namespace RepoStats
                         continue;
                     }
 
+                    List<FileChanges> fileChanges = new List<FileChanges>();
+
                     // TODO: need to handle multiple parents.
                     Patch changes = null;
                     changes = repo.Diff.Compare<Patch>(c.Tree, c.Parents.First().Tree);
+
+                    foreach(var patchChanges in changes)
+                    {
+                        FileChanges change = new FileChanges()
+                        {
+                            LinesAdded = patchChanges.LinesAdded,
+                            LinesRemoved = patchChanges.LinesDeleted,
+                            Path = patchChanges.Path
+                        };
+
+                        fileChanges.Add(change);
+                    }
+
+                    Directory.CreateDirectory("patches");
+                    XmlSerializer s = new XmlSerializer(typeof(List<FileChanges>));
+                    s.Serialize(new FileStream("patches/" + c.Id, FileMode.OpenOrCreate), fileChanges);
 
                     ExecutePatchAnalysis(patchAnalysis, c, changes);
                 }
