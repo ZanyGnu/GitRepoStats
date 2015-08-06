@@ -2,6 +2,7 @@
 namespace RepoStats
 {
     using LibGit2Sharp;
+    using ProtoBuf;
 
     public interface CommitAnalyzer: IOutputWriter
     {
@@ -20,10 +21,16 @@ namespace RepoStats
         string GetFormattedString();
     }
 
+    [ProtoContract]
     public class FileChanges
     {
+        [ProtoMember(1)]
         public string Path;
+
+        [ProtoMember(2)]
         public int LinesAdded;
+
+        [ProtoMember(3)]
         public int LinesDeleted;
     }
 }
