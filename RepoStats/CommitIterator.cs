@@ -60,7 +60,7 @@ namespace RepoStats
 
                     List<FileChanges> fileChanges = null;
 
-                    string ext = currentSeerializer == SerializerType.ProtoBuf ? "bin" : "xml";
+                    string ext = GetExtension();
                     string patchFileName = patchDirectory + "/" + c.Id + ext;
 
                     if (File.Exists(patchFileName))
@@ -79,7 +79,7 @@ namespace RepoStats
                                 default:
                                     break;
                             }
-                            
+
                         }
                         catch
                         {
@@ -117,11 +117,24 @@ namespace RepoStats
                             default:
                                 break;
                         }
-                        
+
                     }
 
                     ExecutePatchAnalysis(patchAnalysis, c, fileChanges);
                 }
+            }
+        }
+
+        private static string GetExtension()
+        {
+            switch (currentSeerializer)
+            {
+                case SerializerType.XmlSerializer:
+                    return ".xml";
+                case SerializerType.ProtoBuf:
+                    return ".bin";
+                default:
+                    return "";
             }
         }
 
