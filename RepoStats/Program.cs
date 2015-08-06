@@ -50,7 +50,7 @@ namespace RepoStats
 
                 //FindHotFilesAndCommitters(repoRoot, DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now);
 
-                List<PatchAnalyzer> patchAnalyzers = new List<PatchAnalyzer>();
+                List<FileChangeAnalyzer> patchAnalyzers = new List<FileChangeAnalyzer>();
 
                 patchAnalyzers.Add(new FileInfoAnalyzer(DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now));
                 patchAnalyzers.Add(new CommitterInfoAnalyzer(DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now));

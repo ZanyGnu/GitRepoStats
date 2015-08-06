@@ -8,9 +8,9 @@ namespace RepoStats
         void Visit(Commit c);
     }
 
-    public interface PatchAnalyzer : CommitAnalyzer
+    public interface FileChangeAnalyzer : CommitAnalyzer
     {
-        void Visit(Commit commit, PatchEntryChanges patch);
+        void Visit(Commit commit, FileChanges fileChanges);
     }
 
     public interface IOutputWriter
@@ -18,5 +18,12 @@ namespace RepoStats
         void Write();
 
         string GetFormattedString();
+    }
+
+    public class FileChanges
+    {
+        public string Path;
+        public int LinesAdded;
+        public int LinesDeleted;
     }
 }

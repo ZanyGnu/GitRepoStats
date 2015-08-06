@@ -8,7 +8,7 @@ namespace RepoStats.Analyzers
     using System.Linq;
     using System.Text;
 
-    class CommitTrendAnalyzer : PatchAnalyzer
+    class CommitTrendAnalyzer : FileChangeAnalyzer
     {
         Dictionary<DateTime, long> commitCountByDate = new Dictionary<DateTime, long>();
         long totalCommitCount = 0;
@@ -24,7 +24,7 @@ namespace RepoStats.Analyzers
             totalCommitCount++;
         }
 
-        public void Visit(Commit commit, PatchEntryChanges patchEntryChanges)
+        public void Visit(Commit commit, FileChanges fileChanges)
         {
         }
 

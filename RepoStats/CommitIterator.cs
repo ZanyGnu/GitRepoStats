@@ -10,18 +10,11 @@ namespace RepoStats
 
     public class CommitIterator
     {
-        public class FileChanges
-        {
-            public string Path;
-            public int LinesAdded;
-            public int LinesRemoved;
-        }
-
         List<CommitAnalyzer> commitAnalysis;
-        List<PatchAnalyzer> patchAnalysis;
+        List<FileChangeAnalyzer> patchAnalysis;
         string repoRoot;
 
-        public CommitIterator(string repoRoot, List<CommitAnalyzer> commitAnalysis, List<PatchAnalyzer> patchAnalysis)
+        public CommitIterator(string repoRoot, List<CommitAnalyzer> commitAnalysis, List<FileChangeAnalyzer> patchAnalysis)
         {
             this.commitAnalysis = commitAnalysis;
             this.patchAnalysis = patchAnalysis;
@@ -31,6 +24,14 @@ namespace RepoStats
 
         public void Iterate()
         {
+            string patchDirectory = "patches";
+            XmlSerializer serializer = new XmlSerializer(typeof(List<FileChanges>));
+
+            if (!Directory.Exists(patchDirectory))
+            {
+                Directory.CreateDirectory("patches");
+            }
+
             using (var repo = new Repository(repoRoot))
             {
                 int commitCount = repo.Commits.Count();
@@ -48,29 +49,46 @@ namespace RepoStats
                         continue;
                     }
 
-                    List<FileChanges> fileChanges = new List<FileChanges>();
+                    List<FileChanges> fileChanges = null;
 
-                    // TODO: need to handle multiple parents.
-                    Patch changes = null;
-                    changes = repo.Diff.Compare<Patch>(c.Tree, c.Parents.First().Tree);
+                    string patchFileName = patchDirectory + "/" + c.Id;
 
-                    foreach(var patchChanges in changes)
+                    if (File.Exists(patchFileName))
                     {
-                        FileChanges change = new FileChanges()
+                        Console.WriteLine("Reloading {0} from cache.", c.Id);
+                        try
                         {
-                            LinesAdded = patchChanges.LinesAdded,
-                            LinesRemoved = patchChanges.LinesDeleted,
-                            Path = patchChanges.Path
-                        };
-
-                        fileChanges.Add(change);
+                            fileChanges = (List<FileChanges>)serializer.Deserialize(File.OpenRead(patchFileName));
+                        }
+                        catch
+                        {
+                            // any exception to deserialize, we attempt to find the patch info again and serialize.
+                        }
                     }
 
-                    Directory.CreateDirectory("patches");
-                    XmlSerializer s = new XmlSerializer(typeof(List<FileChanges>));
-                    s.Serialize(new FileStream("patches/" + c.Id, FileMode.OpenOrCreate), fileChanges);
+                    if (fileChanges == null)
+                    {
+                        fileChanges = new List<FileChanges>();
+                        // TODO: need to handle multiple parents.
+                        Patch changes = null;
+                        changes = repo.Diff.Compare<Patch>(c.Tree, c.Parents.First().Tree);
 
-                    ExecutePatchAnalysis(patchAnalysis, c, changes);
+                        foreach (var patchChanges in changes)
+                        {
+                            FileChanges change = new FileChanges()
+                            {
+                                LinesAdded = patchChanges.LinesAdded,
+                                LinesDeleted = patchChanges.LinesDeleted,
+                                Path = patchChanges.Path
+                            };
+
+                            fileChanges.Add(change);
+                        }
+
+                        serializer.Serialize(new FileStream("patches/" + c.Id, FileMode.OpenOrCreate), fileChanges);
+                    }
+
+                    ExecutePatchAnalysis(patchAnalysis, c, fileChanges);
                 }
             }
         }
@@ -89,7 +107,7 @@ namespace RepoStats
 
             if (patchAnalysis != null)
             {
-                foreach (PatchAnalyzer pa in patchAnalysis)
+                foreach (FileChangeAnalyzer pa in patchAnalysis)
                 {
                     pa.Write();
                     htmlData += pa.GetFormattedString();
@@ -103,7 +121,7 @@ namespace RepoStats
                     HtmlTemplates.HtmlPostTemplate));
         }
 
-        private static void ExecuteCommitAnalysis(Commit c, List<CommitAnalyzer> commitAnalysis, List<PatchAnalyzer> patchAnalysis)
+        private static void ExecuteCommitAnalysis(Commit c, List<CommitAnalyzer> commitAnalysis, List<FileChangeAnalyzer> patchAnalysis)
         {
             if (commitAnalysis != null)
             {
@@ -115,22 +133,22 @@ namespace RepoStats
 
             if (patchAnalysis != null)
             {
-                foreach (PatchAnalyzer pa in patchAnalysis)
+                foreach (FileChangeAnalyzer pa in patchAnalysis)
                 {
                     pa.Visit(c);
                 }
             }
         }
 
-        private static void ExecutePatchAnalysis(List<PatchAnalyzer> patchAnalysis, Commit c, Patch changes)
+        private static void ExecutePatchAnalysis(List<FileChangeAnalyzer> patchAnalysis, Commit c, List<FileChanges> changes)
         {
             if (patchAnalysis != null && changes != null)
             {
-                foreach (PatchEntryChanges patchEntryChanges in changes)
+                foreach (FileChanges fileChanges in changes)
                 {
-                    foreach (PatchAnalyzer pa in patchAnalysis)
+                    foreach (FileChangeAnalyzer pa in patchAnalysis)
                     {
-                        pa.Visit(c, patchEntryChanges);
+                        pa.Visit(c, fileChanges);
                     }
                 }
             }

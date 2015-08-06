@@ -9,7 +9,7 @@ namespace RepoStats.Analyzers
     using System.Linq;
     using System.Text;
 
-    class AuthorCommitTrendAnalyzer : PatchAnalyzer
+    class AuthorCommitTrendAnalyzer : FileChangeAnalyzer
     {
         class SignatureComparer : IEqualityComparer<Signature>
         {
@@ -43,7 +43,7 @@ namespace RepoStats.Analyzers
             totalCommitCount++;
         }
 
-        public void Visit(Commit commit, PatchEntryChanges patchEntryChanges)
+        public void Visit(Commit commit, FileChanges fileChanges)
         {
         }
 

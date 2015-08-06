@@ -7,7 +7,7 @@ namespace RepoStats.Analyzers
     using System.Collections.Generic;
     using System.Linq;
 
-    class LinesOfCodeTrendAnalyzer: PatchAnalyzer
+    class LinesOfCodeTrendAnalyzer: FileChangeAnalyzer
     {
         Dictionary<DateTime, long> lineCountByDate = new Dictionary<DateTime, long>();
         long totalLineCount = 0;
@@ -16,7 +16,7 @@ namespace RepoStats.Analyzers
         {
         }
 
-        public void Visit(Commit commit, PatchEntryChanges patchEntryChanges)
+        public void Visit(Commit commit, FileChanges fileChanges)
         {
             DateTime commitDate = commit.Committer.When.DateTime.Round(TimeSpan.FromDays(1));
             if (!lineCountByDate.ContainsKey(commitDate))
@@ -24,8 +24,8 @@ namespace RepoStats.Analyzers
                 lineCountByDate[commitDate] = 0;
             }
 
-            lineCountByDate[commitDate] += patchEntryChanges.LinesAdded - patchEntryChanges.LinesDeleted;
-            totalLineCount += patchEntryChanges.LinesAdded - patchEntryChanges.LinesDeleted;
+            lineCountByDate[commitDate] += fileChanges.LinesAdded - fileChanges.LinesDeleted;
+            totalLineCount += fileChanges.LinesAdded - fileChanges.LinesDeleted;
         }
 
         public void Write()

@@ -8,7 +8,7 @@ namespace RepoStats.Analyzers
     using System.Linq;
     using System.Text;
 
-    public class CommitterInfoAnalyzer : PatchAnalyzer
+    public class CommitterInfoAnalyzer : FileChangeAnalyzer
     {
         public class GitCommitterInfo
         {
@@ -45,10 +45,10 @@ namespace RepoStats.Analyzers
             GitComitterInfos[c.Committer.Name].NumberOfCommits++;
         }
 
-        public void Visit(Commit commit, PatchEntryChanges patchEntryChanges)
+        public void Visit(Commit commit, FileChanges fileChanges)
         {
-            GitComitterInfos[commit.Committer.Name].LinesAdded += patchEntryChanges.LinesAdded;
-            GitComitterInfos[commit.Committer.Name].LinesDeleted += patchEntryChanges.LinesDeleted;
+            GitComitterInfos[commit.Committer.Name].LinesAdded += fileChanges.LinesAdded;
+            GitComitterInfos[commit.Committer.Name].LinesDeleted += fileChanges.LinesDeleted;
         }
 
         public void Write()

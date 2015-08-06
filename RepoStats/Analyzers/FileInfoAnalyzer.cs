@@ -8,7 +8,7 @@ namespace RepoStats.Analyzers
     using System.Linq;
     using System.Text;
 
-    public class FileInfoAnalyzer : PatchAnalyzer
+    public class FileInfoAnalyzer : FileChangeAnalyzer
     {
         public class GitFileInfo
         {
@@ -34,24 +34,24 @@ namespace RepoStats.Analyzers
 
         }
 
-        public void Visit(Commit commit, PatchEntryChanges patchEntryChanges)
+        public void Visit(Commit commit, FileChanges fileChanges)
         {
-            if (!GitFileInfos.ContainsKey(patchEntryChanges.Path))
+            if (!GitFileInfos.ContainsKey(fileChanges.Path))
             {
                 GitFileInfos.Add(
-                    patchEntryChanges.Path,
+                    fileChanges.Path,
                     new GitFileInfo()
                     {
-                        Path = patchEntryChanges.Path,
+                        Path = fileChanges.Path,
                         LinesAdded = 0,
                         LinesDeleted = 0,
                         NumberOfCommits = 0
                     });
             }
 
-            GitFileInfos[patchEntryChanges.Path].LinesAdded += patchEntryChanges.LinesAdded;
-            GitFileInfos[patchEntryChanges.Path].LinesDeleted += patchEntryChanges.LinesDeleted;
-            GitFileInfos[patchEntryChanges.Path].NumberOfCommits++;
+            GitFileInfos[fileChanges.Path].LinesAdded += fileChanges.LinesAdded;
+            GitFileInfos[fileChanges.Path].LinesDeleted += fileChanges.LinesDeleted;
+            GitFileInfos[fileChanges.Path].NumberOfCommits++;
         }
 
         public void Write()
