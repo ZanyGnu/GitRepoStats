@@ -2,6 +2,7 @@
 namespace RepoStats
 {
     using LibGit2Sharp;
+    using ProtoBuf;
     using System;
     using System.Collections.Generic;
     using System.IO;
@@ -13,6 +14,14 @@ namespace RepoStats
         List<CommitAnalyzer> commitAnalysis;
         List<FileChangeAnalyzer> patchAnalysis;
         string repoRoot;
+
+        enum SerializerType
+        {
+            XmlSerializer,
+            ProtoBuf,
+        }
+
+        private static SerializerType currentSeerializer = CommitIterator.SerializerType.ProtoBuf;
 
         public CommitIterator(string repoRoot, List<CommitAnalyzer> commitAnalysis, List<FileChangeAnalyzer> patchAnalysis)
         {
@@ -40,7 +49,7 @@ namespace RepoStats
                 foreach (Commit c in repo.Commits)
                 {
                     currentCommitCount++;
-                    Console.Write("\rProcessing {0}/{1} ({2}%)    ", currentCommitCount, commitCount, currentCommitCount * 100 / commitCount);
+                    //Console.Write("\rProcessing {0}/{1} ({2}%)    ", currentCommitCount, commitCount, currentCommitCount * 100 / commitCount);
 
                     ExecuteCommitAnalysis(c, commitAnalysis, patchAnalysis);
 
@@ -51,14 +60,26 @@ namespace RepoStats
 
                     List<FileChanges> fileChanges = null;
 
-                    string patchFileName = patchDirectory + "/" + c.Id;
+                    string ext = currentSeerializer == SerializerType.ProtoBuf ? "bin" : "xml";
+                    string patchFileName = patchDirectory + "/" + c.Id + ext;
 
                     if (File.Exists(patchFileName))
                     {
-                        Console.WriteLine("Reloading {0} from cache.", c.Id);
+                        //Console.WriteLine("Reloading {0} from cache.", c.Id);
                         try
                         {
-                            fileChanges = (List<FileChanges>)serializer.Deserialize(File.OpenRead(patchFileName));
+                            switch (currentSeerializer)
+                            {
+                                case SerializerType.XmlSerializer:
+                                    fileChanges = (List<FileChanges>)serializer.Deserialize(File.OpenRead(patchFileName));
+                                    break;
+                                case SerializerType.ProtoBuf:
+                                    fileChanges = Serializer.Deserialize<List<FileChanges>>(File.OpenRead(patchFileName));
+                                    break;
+                                default:
+                                    break;
+                            }
+                            
                         }
                         catch
                         {
@@ -85,7 +106,18 @@ namespace RepoStats
                             fileChanges.Add(change);
                         }
 
-                        serializer.Serialize(new FileStream("patches/" + c.Id, FileMode.OpenOrCreate), fileChanges);
+                        switch (currentSeerializer)
+                        {
+                            case SerializerType.XmlSerializer:
+                                serializer.Serialize(new FileStream(patchFileName, FileMode.OpenOrCreate), fileChanges);
+                                break;
+                            case SerializerType.ProtoBuf:
+                                Serializer.Serialize(new FileStream(patchFileName, FileMode.OpenOrCreate, FileAccess.Read), fileChanges);
+                                break;
+                            default:
+                                break;
+                        }
+                        
                     }
 
                     ExecutePatchAnalysis(patchAnalysis, c, fileChanges);

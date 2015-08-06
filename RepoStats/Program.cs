@@ -7,6 +7,7 @@ namespace RepoStats
     using System;
     using System.Collections.Generic;
     using System.Configuration;
+    using System.Diagnostics;
     using System.Globalization;
     using System.Linq;
 
@@ -16,6 +17,8 @@ namespace RepoStats
         static void Main(string[] args)
         {
             string repoRoot = string.Empty;
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
 
             if (args != null && args.Length > 0)
             {
@@ -61,6 +64,9 @@ namespace RepoStats
                 CommitIterator iterator = new CommitIterator(repoRoot, null, patchAnalyzers);
                 iterator.Iterate();
                 iterator.WriteOutput();
+
+                stopwatch.Stop();
+                Console.WriteLine("Time To execute: {0}", stopwatch.Elapsed);
             }
         }
     }
