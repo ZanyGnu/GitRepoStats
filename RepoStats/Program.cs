@@ -8,6 +8,8 @@ namespace RepoStats
     using System.Collections.Generic;
     using System.Configuration;
     using System.Diagnostics;
+    using System.IO;
+    using System.Xml;
 
     public class Program
     {        
@@ -25,9 +27,12 @@ namespace RepoStats
             {
                 repoRoot = ConfigurationManager.AppSettings["RepoRoot"];
             }
-            
+
+            string repoName = GetRepoName(repoRoot);
+
             using (var repo = new Repository(repoRoot))
             {
+                //repo.Info
                 List<FileChangeAnalyzer> patchAnalyzers = new List<FileChangeAnalyzer>();
 
                 patchAnalyzers.Add(new FileInfoAnalyzer(DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now));
@@ -36,13 +41,30 @@ namespace RepoStats
                 patchAnalyzers.Add(new LinesOfCodeTrendAnalyzer());
                 patchAnalyzers.Add(new AuthorCommitTrendAnalyzer());
 
-                CommitIterator iterator = new CommitIterator(repoRoot, null, patchAnalyzers);
+                CommitIterator iterator = new CommitIterator(repoRoot, repoName, null, patchAnalyzers);
                 iterator.Iterate();
                 iterator.WriteOutput();
 
                 stopwatch.Stop();
                 Console.WriteLine("Time To execute: {0}", stopwatch.Elapsed);
             }
+        }
+
+        private static string GetRepoName(string repoRoot)
+        {
+            string repoConfigPath = Path.Combine(repoRoot, "repo.config");
+            if (File.Exists(repoConfigPath))
+            {
+                XmlDocument xmlDoc = new XmlDocument();
+                xmlDoc.LoadXml(File.ReadAllText(repoConfigPath));
+                XmlNodeList objNode = xmlDoc.SelectNodes("/Repository/Name");
+                if (objNode != null && objNode.Count > 0)
+                {
+                    return objNode[0].Name;
+                }
+            }
+
+            return Path.GetDirectoryName(repoRoot);            
         }
     }
 }

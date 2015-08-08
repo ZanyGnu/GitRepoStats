@@ -14,6 +14,7 @@ namespace RepoStats
         List<CommitAnalyzer> commitAnalysis;
         List<FileChangeAnalyzer> patchAnalysis;
         string repoRoot;
+        string repoName;
 
         enum SerializerType
         {
@@ -23,26 +24,28 @@ namespace RepoStats
 
         private static SerializerType currentSeerializer = CommitIterator.SerializerType.ProtoBuf;
 
-        public CommitIterator(string repoRoot, List<CommitAnalyzer> commitAnalysis, List<FileChangeAnalyzer> patchAnalysis)
+        public CommitIterator(string repoRoot, string repoName, List<CommitAnalyzer> commitAnalysis, List<FileChangeAnalyzer> patchAnalysis)
         {
             this.commitAnalysis = commitAnalysis;
             this.patchAnalysis = patchAnalysis;
             this.repoRoot = repoRoot;
-
+            this.repoName = repoName;
         }
 
         public void Iterate()
         {
-            string patchDirectory = "patches";
+            
             XmlSerializer serializer = new XmlSerializer(typeof(List<FileChanges>));
-
-            if (!Directory.Exists(patchDirectory))
-            {
-                Directory.CreateDirectory("patches");
-            }
 
             using (var repo = new Repository(repoRoot))
             {
+                string patchDirectory = Path.Combine(repo.Info.Path, ".patches");
+                                
+                if (!Directory.Exists(patchDirectory))
+                {
+                    Directory.CreateDirectory(patchDirectory);
+                }
+
                 int commitCount = repo.Commits.Count();
                 int currentCommitCount = 0;
 
@@ -112,7 +115,7 @@ namespace RepoStats
                                 serializer.Serialize(new FileStream(patchFileName, FileMode.OpenOrCreate), fileChanges);
                                 break;
                             case SerializerType.ProtoBuf:
-                                Serializer.Serialize(new FileStream(patchFileName, FileMode.OpenOrCreate, FileAccess.Read), fileChanges);
+                                Serializer.Serialize(new FileStream(patchFileName, FileMode.OpenOrCreate), fileChanges);
                                 break;
                             default:
                                 break;
