@@ -120,7 +120,6 @@ namespace RepoStats
                             default:
                                 break;
                         }
-
                     }
 
                     ExecutePatchAnalysis(patchAnalysis, c, fileChanges);

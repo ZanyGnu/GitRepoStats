@@ -76,7 +76,7 @@ namespace RepoStats.Analyzers
             string fileInfoChangesTableString = HtmlTemplates.Table.TableTemplate;
             StringBuilder trFileInfosContent = new StringBuilder();
 
-            foreach (FileInfoAnalyzer.GitFileInfo fileInfo in GitFileInfos.Values.OrderByDescending(c => (c.LinesDeleted + c.LinesAdded)).Take(20))
+            foreach (FileInfoAnalyzer.GitFileInfo fileInfo in GitFileInfos.Values.OrderByDescending(c => (c.NumberOfCommits)).Take(20))
             {
                 trFileInfosContent.AppendFormat(
                     HtmlTemplates.Table.trTemplate,

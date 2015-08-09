@@ -35,11 +35,11 @@ namespace RepoStats
                 //repo.Info
                 List<FileChangeAnalyzer> patchAnalyzers = new List<FileChangeAnalyzer>();
 
+                patchAnalyzers.Add(new CommitTrendAnalyzer());
+                patchAnalyzers.Add(new AuthorCommitTrendAnalyzer());
                 patchAnalyzers.Add(new FileInfoAnalyzer(DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now));
                 patchAnalyzers.Add(new CommitterInfoAnalyzer(DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now));
-                patchAnalyzers.Add(new CommitTrendAnalyzer());
                 patchAnalyzers.Add(new LinesOfCodeTrendAnalyzer());
-                patchAnalyzers.Add(new AuthorCommitTrendAnalyzer());
 
                 CommitIterator iterator = new CommitIterator(repoRoot, repoName, null, patchAnalyzers);
                 iterator.Iterate();
