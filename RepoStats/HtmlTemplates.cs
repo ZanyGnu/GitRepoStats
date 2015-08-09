@@ -79,18 +79,13 @@ namespace RepoStats
             </body>
             </html>";
 
-        public static string FillerTemplate = @"
-        
+        public static string FillerTemplate = @"        
             <p class=MsoNormal>&nbsp;</p>
             <br><br><br><hr><br><br>
             <p class=MsoNormal><i>Content</i></p>
-
             <p class=MsoNormal>&nbsp;</p>
-
             <p class=MsoNormal>&nbsp;</p>
-
             <p class=MsoNormal>&nbsp;</p>
-
             <p class=MsoNormal>&nbsp;</p>";
 
         public static class Table
@@ -193,12 +188,15 @@ namespace RepoStats
 
         public static class Graph
         {
-            public static string ContainerTempalte = @"<div id='container' style='min-width: 310px; height: 400px; margin: 0 auto'></div>";
+            public static string ContainerTempalte = @"<span id='container' style='width: 100x; height: 400px; margin: 0 auto' />";
             public static string GraphTemplate = @"
                 <script type='text/javascript'>//<![CDATA[ 
 
                 $(function () {{
                     $('#container').highcharts({{
+                        chart: {{
+                            zoomType: 'x'
+                        }},
                         title: {{
                             text: 'Daily code trend',
                             x: -20 //center
@@ -211,12 +209,6 @@ namespace RepoStats
                             categories: [
                                 {0}
                             ]
-                            /*
-                                categories: [
-                                'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                                'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-                            ]
-                            */
                         }},
                         yAxis: {{
                             title: {{
@@ -248,11 +240,10 @@ namespace RepoStats
             ";
 
             public static string SeriesTemplate = @"
-            {{
-                name: '{0}',
-                data: [{1}]
-            }}, 
-            ";
+                            {{
+                                name: '{0}',
+                                data: [{1}]
+                            }}, ";
         }
     }
 }
