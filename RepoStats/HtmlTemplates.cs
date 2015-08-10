@@ -154,11 +154,20 @@ namespace RepoStats
             public static string SVGTemplatePre = @"
             <h1>Contributions</h1><br>
             <svg width = '721' height='110'>
+                <script type='text/ecmascript'><![CDATA[
+                    function clickCallBack(mouseEvt)
+                    {
+                        var svgObj = mouseEvt.target;
+                        var date = svgObj.getAttribute('data-date');
+                        //alert();
+                    }
+                ]]>
+                </script>
                 <g transform = 'translate(20, 20)' >";
 
             public static string CellEntryTemplate = @"
                     <g transform='translate({0}, 0)'>
-                        <rect class='day' width='11' height='11' y='{1}' fill='{2}' data-count='{3}' data-date='{4}'></rect>
+                        <rect class='day' width='11' height='11' y='{1}' fill='{2}' data-count='{3}' data-date='{4}' onClick='clickCallBack(evt)'></rect>
                     </g>";
 
             public static string SVGTemplatePost = @"
