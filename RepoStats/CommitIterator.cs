@@ -39,7 +39,7 @@ namespace RepoStats
 
             using (var repo = new Repository(repoRoot))
             {
-                string patchDirectory = Path.Combine(repo.Info.Path, ".patches");
+                string patchDirectory = Path.Combine(repo.Info.Path, "patches");
                                 
                 if (!Directory.Exists(patchDirectory))
                 {
@@ -52,7 +52,7 @@ namespace RepoStats
                 foreach (Commit c in repo.Commits)
                 {
                     currentCommitCount++;
-                    //Console.Write("\rProcessing {0}/{1} ({2}%)    ", currentCommitCount, commitCount, currentCommitCount * 100 / commitCount);
+                    Console.Write("\rProcessing {0}/{1} ({2}%)    ", currentCommitCount, commitCount, currentCommitCount * 100 / commitCount);
 
                     ExecuteCommitAnalysis(c, commitAnalysis, patchAnalysis);
 
@@ -95,7 +95,7 @@ namespace RepoStats
                         fileChanges = new List<FileChanges>();
                         // TODO: need to handle multiple parents.
                         Patch changes = null;
-                        changes = repo.Diff.Compare<Patch>(c.Tree, c.Parents.First().Tree);
+                        changes = repo.Diff.Compare<Patch>(c.Parents.First().Tree, c.Tree);
 
                         foreach (var patchChanges in changes)
                         {

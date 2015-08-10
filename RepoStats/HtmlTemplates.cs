@@ -188,7 +188,10 @@ namespace RepoStats
 
         public static class Graph
         {
-            public static string ContainerTempalte = @"<span id='container' style='width: 100x; height: 400px; margin: 0 auto' />";
+            public static string ContainerTempalte = @"
+                <div id='container' style='width: 1000px; height: 400px; margin: 0 auto;'>
+                </div>";
+
             public static string GraphTemplate = @"
                 <script type='text/javascript'>//<![CDATA[ 
 
