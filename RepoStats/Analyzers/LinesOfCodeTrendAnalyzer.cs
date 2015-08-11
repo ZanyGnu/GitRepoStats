@@ -31,16 +31,16 @@ namespace RepoStats.Analyzers
 
         public void Write()
         {
-            Console.WriteLine("Line count by date");
-            IOrderedEnumerable<KeyValuePair<DateTime, long>> orderedLineCounts = lineCountByDate.OrderBy(c => c.Key);
-            long currentTotalCount = 0;
-            foreach (KeyValuePair<DateTime, long> lineCountOnDate in orderedLineCounts)
-            {
-                currentTotalCount += lineCountOnDate.Value;
-                Console.WriteLine("\t{0} |{1}",
-                    lineCountOnDate.Key.ToString("dd/MM/yy"),
-                    new String('*', (int)((currentTotalCount * 100) / totalLineCount)));
-            }
+            //Console.WriteLine("Line count by date");
+            //IOrderedEnumerable<KeyValuePair<DateTime, long>> orderedLineCounts = lineCountByDate.OrderBy(c => c.Key);
+            //long currentTotalCount = 0;
+            //foreach (KeyValuePair<DateTime, long> lineCountOnDate in orderedLineCounts)
+            //{
+            //    currentTotalCount += lineCountOnDate.Value;
+            //    Console.WriteLine("\t{0} |{1}",
+            //        lineCountOnDate.Key.ToString("dd/MM/yy"),
+            //        new String('*', (int)((currentTotalCount * 100) / totalLineCount)));
+            //}
         }
 
         public string GetFormattedString()

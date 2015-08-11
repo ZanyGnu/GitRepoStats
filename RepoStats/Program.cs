@@ -40,6 +40,7 @@ namespace RepoStats
                 patchAnalyzers.Add(new FileInfoAnalyzer(DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now));
                 patchAnalyzers.Add(new CommitterInfoAnalyzer(DateTime.Now.Subtract(TimeSpan.FromDays(30)), DateTime.Now));
                 patchAnalyzers.Add(new LinesOfCodeTrendAnalyzer());
+                patchAnalyzers.Add(new CommitsByDayAnalyzer());
 
                 CommitIterator iterator = new CommitIterator(repoRoot, repoName, null, patchAnalyzers);
                 iterator.Iterate();
