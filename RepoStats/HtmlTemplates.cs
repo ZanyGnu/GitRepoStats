@@ -155,20 +155,19 @@ namespace RepoStats
             <h1>Contributions</h1><br>
             <svg width = '721' height='110'>
                 <script type='text/ecmascript'><![CDATA[
-                    function clickCallBack(mouseEvt)
+                    function cc(mouseEvt)
                     {
                         var svgObj = mouseEvt.target;
                         var date = svgObj.getAttribute('data-date');
-                        //alert();
+                        var dataUrl = 'commitsByDate/' + date + '.html';
+                        document.getElementById('contributionsFrame').src=dataUrl;
                     }
                 ]]>
                 </script>
                 <g transform = 'translate(20, 20)' >";
 
             public static string CellEntryTemplate = @"
-                    <g transform='translate({0}, 0)'>
-                        <rect class='day' width='11' height='11' y='{1}' fill='{2}' data-count='{3}' data-date='{4}' onClick='clickCallBack(evt)'></rect>
-                    </g>";
+                    <g transform='translate({0}, 0)'><rect class='day' width='11' height='11' y='{1}' fill='{2}' data-count='{3}' data-date='{4}' onClick='cc(evt)'></rect></g>";
 
             public static string SVGTemplatePost = @"
                     <text x='26' y='-5' class='month'>Aug</text>
@@ -191,7 +190,9 @@ namespace RepoStats
                     <text text-anchor='middle' class='wday' dx='-10' dy='74'>F</text>
                     <text text-anchor='middle' class='wday' dx='-10' dy='87' style='display: none;'>S</text>
                 </g>
-            </svg>";
+            </svg>
+            <br/>
+            <iframe width='710pt' height='400pt' id='contributionsFrame' style='border:none' url='bing.com' ></iframe>";
 
         }
 
