@@ -31,7 +31,7 @@ namespace RepoStats
 	                    {font-family:Calibri;
 	                    panose-1:2 15 5 2 2 2 4 3 2 4;}
                         /* Style Definitions */
-                        p.MsoNormal, li.MsoNormal, div.MsoNormal
+                    p.MsoNormal, li.MsoNormal, div.MsoNormal, a
 	                    {margin-top:0in;
 	                    margin-right:0in;
 	                    margin-bottom:8.0pt;
