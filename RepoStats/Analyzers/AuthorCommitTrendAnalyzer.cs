@@ -103,7 +103,7 @@ namespace RepoStats.Analyzers
             }
 
             return String.Concat(
-                HtmlTemplates.SvgContribution.SVGTemplatePre,
+                String.Format(HtmlTemplates.SvgContribution.SVGTemplatePre, "commitsByAuthor"),
                 svgCells,
                 HtmlTemplates.SvgContribution.SVGTemplatePost);
         }
