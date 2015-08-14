@@ -59,13 +59,14 @@ namespace RepoStats.Analyzers
             string contributionLinkTemplate = "<br><a href='{0}'>{1} ({2})</a>";
             foreach (KeyValuePair<Signature, Dictionary<DateTime, long>> entry in this.commitCountByDate.OrderByDescending(c => c.Value.Values.Aggregate((a,b) => a + b)))
             {
-                string fileName = "contributions\\" + entry.Key.Email + ".html";
-                string directoryName = "contributions";
+                string directoryName = "commitsByAuthor\\" + entry.Key.Email + "\\";
+                string fileName = directoryName  + "Contributions.html";
+                
                 Directory.CreateDirectory(directoryName);
                 File.WriteAllText(fileName,
                     String.Concat(
                         HtmlTemplates.HtmlPreTemplate,
-                        GetContributionData(entry.Value),
+                        GetContributionData(entry.Value, entry.Key.Email),
                         HtmlTemplates.HtmlPostTemplate));
 
                 if (count++ < 20)
@@ -79,7 +80,7 @@ namespace RepoStats.Analyzers
             return returnString.ToString();
         }
 
-        private object GetContributionData(Dictionary<DateTime, long> entry)
+        private object GetContributionData(Dictionary<DateTime, long> entry, string author)
         {
 
             StringBuilder svgCells = new StringBuilder();
@@ -103,7 +104,7 @@ namespace RepoStats.Analyzers
             }
 
             return String.Concat(
-                String.Format(HtmlTemplates.SvgContribution.SVGTemplatePre.EscapeForFormat(), "commitsByAuthor"),
+                String.Format(HtmlTemplates.SvgContribution.SVGTemplatePre.EscapeForFormat(), ""),
                 svgCells,
                 HtmlTemplates.SvgContribution.SVGTemplatePost);
         }
