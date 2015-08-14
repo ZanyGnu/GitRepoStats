@@ -104,7 +104,7 @@ namespace RepoStats.Analyzers
             }
 
             return String.Concat(
-                String.Format(HtmlTemplates.SvgContribution.SVGTemplatePre.EscapeForFormat(), ""),
+                String.Format(HtmlTemplates.SvgContribution.SVGTemplatePre.EscapeForFormat(), "."),
                 svgCells,
                 HtmlTemplates.SvgContribution.SVGTemplatePost);
         }
