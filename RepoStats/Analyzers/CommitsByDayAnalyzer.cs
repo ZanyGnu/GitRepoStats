@@ -67,7 +67,7 @@ namespace RepoStats.Analyzers
                 //fileContents.AppendFormat("</div>{0}", HtmlTemplates.HtmlPostTemplate);
                 File.WriteAllText(
                     fileName,
-                    String.Format(HtmlTemplates.CommitDetails.htmlTemplate.Replace("{0}", "%0%").Replace("{1}", "%1%").Replace("{", "{{").Replace("}", "}}").Replace("%0%", "{0}").Replace("%1%", "{1}"),
+                    String.Format(HtmlTemplates.CommitDetails.htmlTemplate.EscapeForFormat(),
                     fileContents.ToString()));
             }
         }

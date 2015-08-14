@@ -65,7 +65,7 @@ namespace RepoStats.Analyzers
             }
 
             return String.Concat(
-                String.Format(HtmlTemplates.SvgContribution.SVGTemplatePre, "commitsByDate"),
+                String.Format(HtmlTemplates.SvgContribution.SVGTemplatePre.EscapeForFormat(), "commitsByDate"),
                 svgCells,
                 HtmlTemplates.SvgContribution.SVGTemplatePost);
         }

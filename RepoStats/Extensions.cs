@@ -29,5 +29,10 @@ namespace RepoStats
         {
             return startDate <= obj && obj <= endDate;
         }
+
+        public static string EscapeForFormat(this string obj)
+        {
+            return obj.Replace("{0}", "%0%").Replace("{1}", "%1%").Replace("{", "{{").Replace("}", "}}").Replace("%0%", "{0}").Replace("%1%", "{1}");
+        }
     }
 }
