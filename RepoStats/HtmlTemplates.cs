@@ -271,7 +271,7 @@ namespace RepoStats
               none;border-bottom:solid #BDD6EE 1.0pt;border-right:solid #BDD6EE 1.0pt;
               padding:0in 5.4pt 0in 5.4pt'>
               <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'>{1}</p>
+              normal'><a href='../commitsByAuthor/{1}/Contributions.html'>{1}</a></p>
               </td>
               <td valign=top style='width:100pt;border-top:none;border-left:
               none;border-bottom:solid #BDD6EE 1.0pt;border-right:solid #BDD6EE 1.0pt;

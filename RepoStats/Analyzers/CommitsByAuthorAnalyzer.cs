@@ -73,7 +73,8 @@ namespace RepoStats.Analyzers
                             */
                         fileContents.AppendFormat(
                             HtmlTemplates.CommitDetails.trTemplate,
-                            commit.Id, commit.Author,
+                            commit.Id,
+                            commit.Author,
                             commit.CommitTime.ToString("yy/MM/dd hh:mm:ss"),
                             commit.Message);
                     }
