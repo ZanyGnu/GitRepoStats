@@ -155,12 +155,41 @@ namespace RepoStats
             <h1>Contributions</h1><br>
             <svg width = '721' height='110'>
                 <script type='text/ecmascript'><![CDATA[
+                    function inIframe () {
+                        try {
+                            return window.self !== window.top;
+                        } catch (e) {
+                            return true;
+                        }
+                    }
+
                     function cc(mouseEvt)
                     {
                         var svgObj = mouseEvt.target;
                         var date = svgObj.getAttribute('data-date');
                         var dataUrl = '{0}/' + date + '.html';
-                        document.getElementById('contributionsFrame').src=dataUrl;
+                        if (inIframe())
+                        {
+                            window.location.href=dataUrl;
+                        }
+                        else
+                        {
+                            document.getElementById('contributionsFrame').src=dataUrl;
+                        }
+                    }
+
+                    function ac(mouseEvt)
+                    {
+                        var aObj = mouseEvt.target;
+                        var url = aObj.getAttribute('href');
+                        if (inIframe())
+                        {
+                            window.location.href=url;
+                        }
+                        else
+                        {
+                            document.getElementById('contributionsFrame').src=dataUrl;
+                        }
                     }
                 ]]>
                 </script>
@@ -271,7 +300,7 @@ namespace RepoStats
               none;border-bottom:solid #BDD6EE 1.0pt;border-right:solid #BDD6EE 1.0pt;
               padding:0in 5.4pt 0in 5.4pt'>
               <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'>{1}</p>
+              normal'><a href='../commitsByAuthor/{1}/Contributions.html' onClick='ac(evt)'>{1}</a></p>
               </td>
               <td valign=top style='width:100pt;border-top:none;border-left:
               none;border-bottom:solid #BDD6EE 1.0pt;border-right:solid #BDD6EE 1.0pt;
@@ -294,6 +323,29 @@ namespace RepoStats
               <html>
 
                 <head>
+                <script type='text/ecmascript'>
+                    function inIframe () {
+                        try {
+                            return window.self !== window.top;
+                        } catch (e) {
+                            return true;
+                        }
+                    }
+
+                    function ac(mouseEvt)
+                    {
+                        var aObj = mouseEvt.target;
+                        var url = aObj.getAttribute('href');
+                        if (inIframe())
+                        {
+                            window.top.location.href = url;
+                        }
+                        else
+                        {
+                            window.location.href=url;
+                        }
+                    }
+                </script>
                 <style>
                 <!--
                  /* Font Definitions */
