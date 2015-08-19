@@ -60,15 +60,19 @@ namespace RepoStats.Analyzers
                         */
                     fileContents.AppendFormat(
                         HtmlTemplates.CommitDetails.trTemplate,
-                        commit.Id, commit.Author, 
+                        commit.Id,
+                        "../commitsByAuthor/" + commit.Author + "/Contributions.html",
+                        commit.Author, 
                         commit.CommitTime.ToString("yy/MM/dd hh:mm:ss"), 
                         commit.Message);
                 }
                 //fileContents.AppendFormat("</div>{0}", HtmlTemplates.HtmlPostTemplate);
                 File.WriteAllText(
                     fileName,
-                    String.Format(HtmlTemplates.CommitDetails.htmlTemplate.EscapeForFormat(),
-                    fileContents.ToString()));
+                    String.Format(
+                        HtmlTemplates.CommitDetails.htmlTemplate.EscapeForFormat(),
+                        dateString,
+                        fileContents.ToString()));
             }
         }
 

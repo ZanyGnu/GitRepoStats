@@ -300,20 +300,20 @@ namespace RepoStats
               none;border-bottom:solid #BDD6EE 1.0pt;border-right:solid #BDD6EE 1.0pt;
               padding:0in 5.4pt 0in 5.4pt'>
               <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'><a href='../commitsByAuthor/{1}/Contributions.html' onClick='ac(evt)'>{1}</a></p>
+              normal'><a href='{1}' target='contribs'>{2}</a></p>
               </td>
               <td valign=top style='width:100pt;border-top:none;border-left:
               none;border-bottom:solid #BDD6EE 1.0pt;border-right:solid #BDD6EE 1.0pt;
               padding:0in 5.4pt 0in 5.4pt'>
               <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-              normal'>{2}</p>
+              normal'>{3}</p>
               </td>
               <td valign=top style='width:500pt;border-top:none;border-left:
               none;border-bottom:solid #BDD6EE 1.0pt;border-right:solid #BDD6EE 1.0pt;
               padding:0in 5.4pt 0in 5.4pt'>
               <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
               normal'>
-                {3}
+                {4}
               </p>
               </td>
              </tr>";
@@ -399,7 +399,7 @@ namespace RepoStats
                 </style>
 
                 </head>
-
+                <h1>{0}</h1>
                 <div class=WordSection1>
 
                 <table class=MsoTable15Grid4Accent2 border=1 cellspacing=0 cellpadding=0
@@ -428,7 +428,7 @@ namespace RepoStats
                   normal'><b><span style='color:white'>Description</span></b></p>
                   </td>
                  </tr>
-                 {0}
+                 {1}
                 </table>
                 </div>
                 </body>
