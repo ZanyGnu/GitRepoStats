@@ -153,7 +153,7 @@ namespace RepoStats
         {
             public static string SVGTemplatePre = @"
             <h1>Contributions</h1><br>
-            <svg width = '721' height='110'>
+            <svg width = '721' height='110' onload='init(evt)'>
                 <script type='text/ecmascript'><![CDATA[
                     function inIframe () {
                         try {
@@ -191,12 +191,34 @@ namespace RepoStats
                             document.getElementById('contributionsFrame').src=dataUrl;
                         }
                     }
+
+                    function init(evt) {                            
+                        if ( window.svgDocument == null ) {
+                            // Define SGV
+                            svgDocument = evt.target.ownerDocument;
+                        }
+                        tooltip = svgDocument.getElementById('tooltip');
+                    }
+
+                    function ShowTooltip(evt) {
+        
+                        // Put tooltip in the right position, change the text and make it visible
+                        tooltip.setAttributeNS(null,'x',evt.clientX+10);
+                        tooltip.setAttributeNS(null,'y',parseInt(evt.target.getAttributeNS(null,'y')) +30);
+                        tooltip.firstChild.data = 'Contributions on ' + evt.target.getAttributeNS(null,'data-date');
+                        tooltip.setAttributeNS(null,'visibility','visible');
+                    }
+
+                    function HideTooltip(evt)
+                    {
+                        tooltip.setAttributeNS(null, 'visibility', 'hidden');
+                    }
                 ]]>
                 </script>
                 <g transform = 'translate(20, 20)' >";
 
             public static string CellEntryTemplate = @"
-                    <g transform='translate({0}, 0)'><rect class='day' width='11' height='11' y='{1}' fill='{2}' data-count='{3}' data-date='{4}' onClick='cc(evt)'></rect></g>";
+                    <g transform='translate({0}, 0)'><rect class='day' width='11' height='11' y='{1}' fill='{2}' data-count='{3}' data-date='{4}' onClick='cc(evt)'  onmousemove='ShowTooltip(evt)' onmouseout='HideTooltip(evt)'></rect></g>";
 
             public static string SVGTemplatePost = @"
                     <text x='26' y='-5' class='month'>Aug</text>
@@ -218,6 +240,7 @@ namespace RepoStats
                     <text text-anchor='middle' class='wday' dx='-10' dy='61' style='display: none;'>T</text>
                     <text text-anchor='middle' class='wday' dx='-10' dy='74'>F</text>
                     <text text-anchor='middle' class='wday' dx='-10' dy='87' style='display: none;'>S</text>
+                    <text id='tooltip' x='0' y='0' visibility='hidden'>Tooltip</text>
                 </g>
             </svg>
             <br/>
@@ -323,29 +346,6 @@ namespace RepoStats
               <html>
 
                 <head>
-                <script type='text/ecmascript'>
-                    function inIframe () {
-                        try {
-                            return window.self !== window.top;
-                        } catch (e) {
-                            return true;
-                        }
-                    }
-
-                    function ac(mouseEvt)
-                    {
-                        var aObj = mouseEvt.target;
-                        var url = aObj.getAttribute('href');
-                        if (inIframe())
-                        {
-                            window.top.location.href = url;
-                        }
-                        else
-                        {
-                            window.location.href=url;
-                        }
-                    }
-                </script>
                 <style>
                 <!--
                  /* Font Definitions */
@@ -399,7 +399,7 @@ namespace RepoStats
                 </style>
 
                 </head>
-                <h1>{0}</h1>
+                <h1>Commits on {0}</h1><br/>
                 <div class=WordSection1>
 
                 <table class=MsoTable15Grid4Accent2 border=1 cellspacing=0 cellpadding=0
