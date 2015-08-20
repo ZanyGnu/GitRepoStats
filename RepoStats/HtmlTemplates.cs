@@ -153,6 +153,21 @@ namespace RepoStats
         {
             public static string SVGTemplatePre = @"
             <h1>Contributions</h1><br>
+            <style>
+                div.contribToolTip {
+                    position: absolute;
+                    background-color:black;
+                    color:white;
+                    padding: 5pt;
+                    font-family: 'Calibri', sans-serif;
+                    font-size: 12pt;
+                    opacity: 0.7;
+                    border-radius: 3px;
+                    position:absolute;
+                    visibility: hidden;
+                }
+            </style>
+            <div id='tooltipSpan' class='contribToolTip'>tool</div>
             <svg width = '721' height='110' onload='init(evt)'>
                 <script type='text/ecmascript'><![CDATA[
                     function inIframe () {
@@ -191,27 +206,21 @@ namespace RepoStats
                             document.getElementById('contributionsFrame').src=dataUrl;
                         }
                     }
-
                     function init(evt) {                            
-                        if ( window.svgDocument == null ) {
-                            // Define SGV
-                            svgDocument = evt.target.ownerDocument;
-                        }
-                        tooltip = svgDocument.getElementById('tooltip');
+                        contribToolTip = $('.contribToolTip');
                     }
 
-                    function ShowTooltip(evt) {
-        
+                    function ShowTooltip(evt) {        
                         // Put tooltip in the right position, change the text and make it visible
-                        tooltip.setAttributeNS(null,'x',evt.clientX+10);
-                        tooltip.setAttributeNS(null,'y',parseInt(evt.target.getAttributeNS(null,'y')) +30);
-                        tooltip.firstChild.data = 'Contributions on ' + evt.target.getAttributeNS(null,'data-date');
-                        tooltip.setAttributeNS(null,'visibility','visible');
+                        x = evt.clientX - 80 ;
+                        y = evt.clientY - 40;
+                        tooltipSpan.innerHTML = '<b>' + evt.target.getAttributeNS(null,'data-count') + ' contributions </b> on ' + evt.target.getAttributeNS(null,'data-date');                        
+                        contribToolTip.css({'top': y,'left': x, 'visibility':'visible'});
                     }
 
                     function HideTooltip(evt)
                     {
-                        tooltip.setAttributeNS(null, 'visibility', 'hidden');
+                        contribToolTip.css({visibility:'hidden'});
                     }
                 ]]>
                 </script>
