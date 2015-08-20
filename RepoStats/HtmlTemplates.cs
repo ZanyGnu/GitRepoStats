@@ -182,7 +182,13 @@ namespace RepoStats
                     {
                         var svgObj = mouseEvt.target;
                         var date = svgObj.getAttribute('data-date');
-                        var dataUrl = '{0}/' + date + '.html';
+                        var num = parseInt(svgObj.getAttribute('data-count'));
+                        if (num <= 0) {
+                            dataUrl = "";
+                        }
+                        else {
+                            dataUrl = 'commitsByDate/' + date + '.html';
+                        }
                         if (inIframe())
                         {
                             window.location.href=dataUrl;
@@ -193,19 +199,6 @@ namespace RepoStats
                         }
                     }
 
-                    function ac(mouseEvt)
-                    {
-                        var aObj = mouseEvt.target;
-                        var url = aObj.getAttribute('href');
-                        if (inIframe())
-                        {
-                            window.location.href=url;
-                        }
-                        else
-                        {
-                            document.getElementById('contributionsFrame').src=dataUrl;
-                        }
-                    }
                     function init(evt) {                            
                         contribToolTip = $('.contribToolTip');
                     }
@@ -249,12 +242,10 @@ namespace RepoStats
                     <text text-anchor='middle' class='wday' dx='-10' dy='61' style='display: none;'>T</text>
                     <text text-anchor='middle' class='wday' dx='-10' dy='74'>F</text>
                     <text text-anchor='middle' class='wday' dx='-10' dy='87' style='display: none;'>S</text>
-                    <text id='tooltip' x='0' y='0' visibility='hidden'>Tooltip</text>
                 </g>
             </svg>
             <br/>
-            <iframe width='710pt' height='400pt' id='contributionsFrame' style='border:none' url='bing.com' ></iframe>";
-
+            <iframe width='710pt' height='400pt' id='contributionsFrame' style='border:none' url='' ></iframe>";
         }
 
         public static class Graph
