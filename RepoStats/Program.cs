@@ -3,7 +3,7 @@ namespace RepoStats
 {
     using Analyzers;
     using LibGit2Sharp;
-
+    using Microsoft.Owin.Hosting;
     using System;
     using System.Collections.Generic;
     using System.Configuration;
@@ -15,6 +15,14 @@ namespace RepoStats
     {        
         static void Main(string[] args)
         {
+            string url = "http://localhost:12345";
+            using (WebApp.Start<Startup>(url))
+            {
+                Process.Start(url); // Launch the browser.
+                Console.WriteLine("Press Enter to exit...");
+                Console.ReadLine();
+            }
+
             string repoRoot = string.Empty;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
