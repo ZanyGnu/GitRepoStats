@@ -184,7 +184,7 @@ namespace RepoStats
                         var date = svgObj.getAttribute('data-date');
                         var num = parseInt(svgObj.getAttribute('data-count'));
                         if (num <= 0) {
-                            dataUrl = "";
+                            dataUrl = '';
                         }
                         else {
                             dataUrl = 'commitsByDate/' + date + '.html';
