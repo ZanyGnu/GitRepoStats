@@ -15,10 +15,12 @@ namespace RepoStats
     {        
         static void Main(string[] args)
         {
-            string url = "http://localhost:12345";
+            string url = "http://localhost:12345/";
             using (WebApp.Start<Startup>(url))
             {
+                url = url + "report.html";
                 Process.Start(url); // Launch the browser.
+                Console.WriteLine("Repo stats launched at {0}", url);
                 Console.WriteLine("Press Enter to exit...");
                 Console.ReadLine();
             }
