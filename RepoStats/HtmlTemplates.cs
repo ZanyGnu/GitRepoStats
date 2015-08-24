@@ -170,14 +170,6 @@ namespace RepoStats
             <div id='tooltipSpan' class='contribToolTip'>tool</div>
             <svg width = '721' height='110' onload='init(evt)'>
                 <script type='text/ecmascript'><![CDATA[
-                    function inIframe () {
-                        try {
-                            return window.self !== window.top;
-                        } catch (e) {
-                            return true;
-                        }
-                    }
-
                     function cc(mouseEvt)
                     {
                         var svgObj = mouseEvt.target;
@@ -189,14 +181,15 @@ namespace RepoStats
                         else {
                             dataUrl = 'commitsByDate/' + date + '.html';
                         }
-                        if (inIframe())
-                        {
-                            window.location.href=dataUrl;
-                        }
-                        else
-                        {
-                            document.getElementById('contributionsFrame').src=dataUrl;
-                        }
+                        $.ajax({    
+                            type: 'GET',
+                            url: dataUrl,             
+                            dataType: 'html',   //expect html to be returned                
+                            success: function(response)
+                            {                    
+                                document.getElementById('contributionsHolder').innerHTML = response;
+                            }
+                        });
                     }
 
                     function init(evt) {                            
@@ -245,7 +238,7 @@ namespace RepoStats
                 </g>
             </svg>
             <br/>
-            <iframe width='710pt' height='400pt' id='contributionsFrame' style='border:none' url='' ></iframe>";
+            <div width='710pt' height='400pt' id='contributionsHolder' style='border:none'></div>";
         }
 
         public static class Graph
