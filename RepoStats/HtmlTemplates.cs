@@ -19,6 +19,9 @@ namespace RepoStats
                     .day:hover { 
                         fill: red;
                     }
+                    .selected {
+                        fill:blue;
+                    }
                     <!--
                         /* Font Definitions */
                         @font-face
@@ -181,6 +184,16 @@ namespace RepoStats
                         else {
                             dataUrl = 'commitsByDate/' + date + '.html';
                         }
+
+                        // reset the older cell value
+                        if (currentHighlightCell != null) { 
+                            currentHighlightCell.setAttribute('class', 'day');
+                        }
+                        // remember the current value
+                        currentHighlightCell = svgObj;
+                        // highlight the highlighted cell
+                        currentHighlightCell.setAttribute('class', 'selected');
+
                         $.ajax({    
                             type: 'GET',
                             url: dataUrl,             
@@ -194,6 +207,7 @@ namespace RepoStats
 
                     function init(evt) {                            
                         contribToolTip = $('.contribToolTip');
+                        currentHighlightCell = null;
                     }
 
                     function ShowTooltip(evt) {        
