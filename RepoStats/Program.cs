@@ -15,16 +15,6 @@ namespace RepoStats
     {        
         static void Main(string[] args)
         {
-            string url = "http://localhost:12345/";
-            using (WebApp.Start<Startup>(url))
-            {
-                url = url + "report.html";
-                Process.Start(url); // Launch the browser.
-                Console.WriteLine("Repo stats launched at {0}", url);
-                Console.WriteLine("Press Enter to exit...");
-                Console.ReadLine();
-            }
-
             string repoRoot = string.Empty;
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
@@ -38,6 +28,17 @@ namespace RepoStats
                 repoRoot = ConfigurationManager.AppSettings["RepoRoot"];
             }
 
+            AnalyzeRepository(repoRoot);
+
+            stopwatch.Stop();
+            Console.WriteLine("Time To execute: {0}", stopwatch.Elapsed);
+
+            StartWebServer();
+
+        }
+
+        private static void AnalyzeRepository(string repoRoot)
+        {
             string repoName = GetRepoName(repoRoot);
 
             using (var repo = new Repository(repoRoot))
@@ -56,9 +57,19 @@ namespace RepoStats
                 CommitIterator iterator = new CommitIterator(repoRoot, repoName, null, patchAnalyzers);
                 iterator.Iterate();
                 iterator.WriteOutput();
+            }
+        }
 
-                stopwatch.Stop();
-                Console.WriteLine("Time To execute: {0}", stopwatch.Elapsed);
+        private static void StartWebServer()
+        {
+            string url = "http://localhost:12345/";
+            using (WebApp.Start<Startup>(url))
+            {
+                url = url + "report.html";
+                Process.Start(url); // Launch the browser.
+                Console.WriteLine("Repo stats launched at {0}", url);
+                Console.WriteLine("Press Enter to exit...");
+                Console.ReadLine();
             }
         }
 
