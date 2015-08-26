@@ -22,6 +22,8 @@ namespace RepoStats
                     .selected {
                         fill:blue;
                     }
+                    text.month{font-size:10px;fill:#aaa}
+                    text.wday{fill:#ccc;font-size:9px}
                     <!--
                         /* Font Definitions */
                         @font-face
