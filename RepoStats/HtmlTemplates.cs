@@ -10,70 +10,7 @@ namespace RepoStats
                 <script type = 'text/javascript' src='http://code.jquery.com/jquery-1.9.1.js'></script>
                 <script type = 'text/javascript' src='http://code.highcharts.com/highcharts.js'></script>
                 <script type = 'text/javascript' src='http://code.highcharts.com/modules/exporting.js'></script>
-        
-
-                <style>
-                    .day {
-                        pointer-events: all;
-                    }
-                    .day:hover { 
-                        fill: red;
-                    }
-                    .selected {
-                        fill:blue;
-                    }
-                    text.month{font-size:10px;fill:#aaa}
-                    text.wday{fill:#ccc;font-size:9px}
-                    td.contrib-title-box{background: #eee;vertical-align:top}
-                    .contrib-table {border: 1px solid #ccc; margin:0px; padding:0px;}
-                    .contrib-title-row {border: 1px solid #ccc; margin:0px; padding:0px;}
-                    .contrib-calendar-row td {border-top: 0px solid #ccc; margin:0px; padding:0px;}
-                    <!--
-                        /* Font Definitions */
-                        @font-face
-	                    {font-family:'Cambria Math';
-	                    panose-1:2 4 5 3 5 4 6 3 2 4;}
-                    @font-face
-	                    {font-family:'Calibri Light';
-	                    panose-1:2 15 3 2 2 2 4 3 2 4;}
-                    @font-face
-	                    {font-family:Calibri;
-	                    panose-1:2 15 5 2 2 2 4 3 2 4;}
-                        /* Style Definitions */
-                    p.MsoNormal, li.MsoNormal, div.MsoNormal, a
-	                    {margin-top:0in;
-	                    margin-right:0in;
-	                    margin-bottom:8.0pt;
-	                    margin-left:0in;
-	                    line-height:107%;
-	                    font-size:11.0pt;
-	                    font-family:'Calibri',sans-serif;}
-                    h1
-	                    {mso-style-link:'Heading 1 Char';
-	                    margin:7.0pt;
-	                    line-height:107%;
-	                    page-break-after:avoid;
-	                    font-size:16.0pt;
-	                    font-family:'Calibri Light',sans-serif;
-	                    color:#2E74B5;
-	                    font-weight:normal;}
-                    span.Heading1Char
-	                    {mso-style-name:'Heading 1 Char';
-	                    mso-style-link:'Heading 1';
-	                    font-family:'Calibri Light',sans-serif;
-	                    color:#2E74B5;}
-                    .MsoChpDefault
-	                    {font-family:'Calibri',sans-serif;}
-                    .MsoPapDefault
-	                    {margin-bottom:8.0pt;
-	                    line-height:107%;}
-                    @page WordSection1        
-                        {size:8.5in 11.0in;
-                        margin:1.0in 1.0in 1.0in 1.0in; }
-                    div.WordSection1
-	                    {page:WordSection1;}
-                    -->
-                </style>
+                <link href='css/styles.css' rel='stylesheet' />
             </head>
             <body>
             ";
@@ -157,20 +94,6 @@ namespace RepoStats
         public static class SvgContribution
         {
             public static string SVGTemplatePre = @"
-            <style>
-                div.contribToolTip {
-                    position: absolute;
-                    background-color:black;
-                    color:white;
-                    padding: 5pt;
-                    font-family: 'Calibri', sans-serif;
-                    font-size: 12pt;
-                    opacity: 0.7;
-                    border-radius: 3px;
-                    position:absolute;
-                    visibility: hidden;
-                }
-            </style>
             <table class='contrib-table'>
                 <tr class='contrib-title-row'><td class='contrib-title-box'><h1>Contributions</h1></td></tr>
                 <tr class='contrib-calendar-row'><td>
@@ -195,7 +118,7 @@ namespace RepoStats
 
 
                                 if (num <= 0) {
-                                    contribDiv.innerHTML = "";
+                                    contribDiv.innerHTML = '';
                                     return;
                                 }
                                 else {
@@ -363,58 +286,7 @@ namespace RepoStats
               <html>
 
                 <head>
-                <style>
-                <!--
-                 /* Font Definitions */
-                 @font-face
-	                {font-family:'Cambria Math';
-	                panose-1:2 4 5 3 5 4 6 3 2 4;}
-                @font-face
-	                {font-family:'Calibri Light';
-	                panose-1:2 15 3 2 2 2 4 3 2 4;}
-                @font-face
-	                {font-family:Calibri;
-	                panose-1:2 15 5 2 2 2 4 3 2 4;}
-                 /* Style Definitions */
-                 p.MsoNormal, li.MsoNormal, div.MsoNormal
-	                {margin-top:0in;
-	                margin-right:0in;
-	                margin-bottom:8.0pt;
-	                margin-left:0in;
-	                line-height:107%;
-	                font-size:9.0pt;
-	                font-family:'Calibri',sans-serif;}
-                h1
-	                {mso-style-link:'Heading 1 Char';
-	                margin-top:12.0pt;
-	                margin-right:0in;
-	                margin-bottom:0in;
-	                margin-left:0in;
-	                margin-bottom:.0001pt;
-	                line-height:107%;
-	                page-break-after:avoid;
-	                font-size:16.0pt;
-	                font-family:'Calibri Light',sans-serif;
-	                color:#2E74B5;
-	                font-weight:normal;}
-                span.Heading1Char
-	                {mso-style-name:'Heading 1 Char';
-	                mso-style-link:'Heading 1';
-	                font-family:'Calibri Light',sans-serif;
-	                color:#2E74B5;}
-                .MsoChpDefault
-	                {font-family:'Calibri',sans-serif;}
-                .MsoPapDefault
-	                {margin-bottom:8.0pt;
-	                line-height:107%;}
-                @page WordSection1
-	                {size:8.5in 11.0in;
-	                margin:1.0in 1.0in 1.0in 1.0in;}
-                div.WordSection1
-	                {page:WordSection1;}
-                -->
-                </style>
-
+                <link href='css/styles.css' rel='stylesheet' />
                 </head>
                 <h1>Commits on {0}</h1><br/>
                 <div class=WordSection1>
