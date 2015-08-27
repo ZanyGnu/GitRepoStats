@@ -182,12 +182,7 @@ namespace RepoStats
                                 var svgObj = mouseEvt.target;
                                 var date = svgObj.getAttribute('data-date');
                                 var num = parseInt(svgObj.getAttribute('data-count'));
-                                if (num <= 0) {
-                                    dataUrl = '';
-                                }
-                                else {
-                                    dataUrl = 'commitsByDate/' + date + '.html';
-                                }
+                                var contribDiv = document.getElementById('contributionsHolder');
 
                                 // reset the older cell value
                                 if (currentHighlightCell != null) { 
@@ -198,13 +193,22 @@ namespace RepoStats
                                 // highlight the highlighted cell
                                 currentHighlightCell.setAttribute('class', 'selected');
 
+
+                                if (num <= 0) {
+                                    contribDiv.innerHTML = "";
+                                    return;
+                                }
+                                else {
+                                    dataUrl = 'commitsByDate/' + date + '.html';
+                                }
+
                                 $.ajax({    
                                     type: 'GET',
                                     url: dataUrl,             
                                     dataType: 'html',   //expect html to be returned                
                                     success: function(response)
                                     {                    
-                                        document.getElementById('contributionsHolder').innerHTML = response;
+                                        contribDiv.innerHTML = response;
                                     }
                                 });
                             }
