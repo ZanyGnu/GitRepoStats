@@ -15,26 +15,28 @@ namespace RepoStats
     {        
         static void Main(string[] args)
         {
-            string repoRoot = string.Empty;
-            Stopwatch stopwatch = new Stopwatch();
-            stopwatch.Start();
-
-            if (args != null && args.Length > 0)
+            var options = new Options();
+            if (CommandLine.Parser.Default.ParseArguments(args, options))
             {
-                repoRoot = args[0];
+                if (!string.IsNullOrEmpty(options.AnalyzeRepositories) && options.AnalyzeRepositories.ToLower().Equals("true"))
+                {
+                    string repoRoot = string.Empty;
+                    Stopwatch stopwatch = new Stopwatch();
+                    stopwatch.Start();
+
+                    repoRoot = ConfigurationManager.AppSettings["RepoRoot"];
+                    
+                    AnalyzeRepository(repoRoot);
+
+                    stopwatch.Stop();
+                    Console.WriteLine("Time To execute: {0}", stopwatch.Elapsed);
+                }
+
+                if (!string.IsNullOrEmpty(options.RunServer) && options.RunServer.ToLower().Equals("true"))
+                {
+                    StartWebServer();
+                }
             }
-            else
-            {
-                repoRoot = ConfigurationManager.AppSettings["RepoRoot"];
-            }
-
-            AnalyzeRepository(repoRoot);
-
-            stopwatch.Stop();
-            Console.WriteLine("Time To execute: {0}", stopwatch.Elapsed);
-
-            StartWebServer();
-
         }
 
         private static void AnalyzeRepository(string repoRoot)
