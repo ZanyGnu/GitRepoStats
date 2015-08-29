@@ -8,6 +8,7 @@
 .selected {
     fill:blue;
 }
+
 text.month{font-size:10px;fill:#aaa}
 text.wday{fill:#ccc;font-size:9px}
 td.contrib-title-box{background: #eee;vertical-align:top}
@@ -16,7 +17,7 @@ td.contrib-title-box{background: #eee;vertical-align:top}
 .contrib-calendar-row td {border-top: 0px solid #ccc; margin:0px; padding:0px;}
 
 /* Font Definitions */
-    @font-face
+@font-face
 	{font-family:'Cambria Math';
 	panose-1:2 4 5 3 5 4 6 3 2 4;}
 @font-face
@@ -43,16 +44,6 @@ h1
 	font-family:'Calibri Light',sans-serif;
 	color:#2E74B5;
 	font-weight:normal;}
-span.Heading1Char
-	{mso-style-name:'Heading 1 Char';
-	mso-style-link:'Heading 1';
-	font-family:'Calibri Light',sans-serif;
-	color:#2E74B5;}
-.MsoChpDefault
-	{font-family:'Calibri',sans-serif;}
-.MsoPapDefault
-	{margin-bottom:8.0pt;
-	line-height:107%;}
 @page WordSection1        
     {size:8.5in 11.0in;
     margin:1.0in 1.0in 1.0in 1.0in; }
