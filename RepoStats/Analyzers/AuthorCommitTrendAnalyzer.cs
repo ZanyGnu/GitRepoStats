@@ -54,7 +54,15 @@ namespace RepoStats.Analyzers
         public string GetFormattedString()
         {
             StringBuilder returnString = new StringBuilder();
-            returnString.Append("<br><br><h1>Top committers</h1><br/>");
+            returnString.Append(@"
+             <table>
+                <tr class='contrib-title-row'>
+                    <td class='contrib-title-box'>
+                        <h1>Top committers</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td>");
             int count = 0;
             string contributionLinkTemplate = "<br><a href='{0}'>{1} ({2})</a>";
             foreach (KeyValuePair<Signature, Dictionary<DateTime, long>> entry in this.commitCountByDate.OrderByDescending(c => c.Value.Values.Aggregate((a,b) => a + b)))
@@ -77,6 +85,10 @@ namespace RepoStats.Analyzers
 
             }
 
+            returnString.Append(@"
+                    </td>
+                </tr>
+            </table>");
             return returnString.ToString();
         }
 
