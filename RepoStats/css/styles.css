@@ -12,7 +12,7 @@
 text.month{font-size:10px;fill:#aaa}
 text.wday{fill:#ccc;font-size:9px}
 td.contrib-title-box{background: #eee;vertical-align:top}
-.contrib-table {border: 1px solid #ccc; margin:0px; padding:0px;}
+table {border: 1px solid #ccc; margin:0px; padding:0px; width: 800px;}
 .contrib-title-row {border: 1px solid #ccc; margin:0px; padding:0px;}
 .contrib-calendar-row td {border-top: 0px solid #ccc; margin:0px; padding:0px;}
 
