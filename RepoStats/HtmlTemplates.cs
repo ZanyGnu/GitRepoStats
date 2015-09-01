@@ -191,8 +191,19 @@ namespace RepoStats
         public static class Graph
         {
             public static string ContainerTempalte = @"
-                <div id='container' style='width: 1000px; height: 400px; margin: 0 auto;'>
-                </div>";
+            <table>
+                <tr class='contrib-title-row'>
+                    <td class='contrib-title-box'>
+                        <h1>Code Trend</h1>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div id='container' style='width: 780px; height: 400px; margin: 0 auto;'>
+                        </div>
+                    </td>
+                </tr>
+            </table>";
 
             public static string GraphTemplate = @"
                 <script type='text/javascript'>//<![CDATA[ 
