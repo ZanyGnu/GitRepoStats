@@ -87,13 +87,7 @@ namespace RepoStats.Analyzers
             }
 
             fileInfoChangesTableString = String.Format(
-                fileInfoChangesTableString
-                    .Replace("{0}", "%0%")
-                    .Replace("{1}", "%1%")
-                    .Replace("{", "{{")
-                    .Replace("}", "}}")
-                    .Replace("%0%", "{0}")
-                    .Replace("%1%", "{1}"), 
+                fileInfoChangesTableString.EscapeForFormat(), 
                 "Hot files",
                 trFileInfosContent);
 

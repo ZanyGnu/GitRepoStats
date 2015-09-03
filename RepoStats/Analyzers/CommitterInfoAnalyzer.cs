@@ -84,13 +84,7 @@ namespace RepoStats.Analyzers
             }
 
             committerInfoTableString = String.Format(
-                committerInfoTableString
-                    .Replace("{0}", "%0%")
-                    .Replace("{1}", "%1%")
-                    .Replace("{", "{{")
-                    .Replace("}", "}}")
-                    .Replace("%0%", "{0}")
-                    .Replace("%1%", "{1}"), 
+                committerInfoTableString.EscapeForFormat(), 
                 "Committer Info",
                 trCommitterInfosContent);
 
