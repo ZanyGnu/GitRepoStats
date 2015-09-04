@@ -99,7 +99,7 @@ namespace RepoStats
                 <tr class='contrib-calendar-row'><td>
                     <div id='tooltipSpan' class='contribToolTip'>tool</div>
                     <center>
-                    <svg width = '721' height='110' onload='init(evt)'>
+                    <svg width = '790' height='130' onload='init(evt)'>
                         <script type='text/ecmascript'><![CDATA[
                             function cc(mouseEvt)
                             {
@@ -159,7 +159,7 @@ namespace RepoStats
                         <g transform = 'translate(20, 20)' >";
 
             public static string CellEntryTemplate = @"
-                            <g transform='translate({0}, 0)'><rect class='day' width='11' height='11' y='{1}' fill='{2}' data-count='{3}' data-date='{4}' onClick='cc(evt)'  onmousemove='ShowTooltip(evt)' onmouseout='HideTooltip(evt)'></rect></g>";
+                            <g transform='translate({0}, 0)'><rect class='day' width='12' height='12' y='{1}' fill='{2}' data-count='{3}' data-date='{4}' onClick='cc(evt)'  onmousemove='ShowTooltip(evt)' onmouseout='HideTooltip(evt)'></rect></g>";
 
             public static string SVGTemplatePost = @"
                             <text x='26' y='-5' class='month'>Aug</text>
@@ -174,13 +174,9 @@ namespace RepoStats
                             <text x='533' y='-5' class='month'>May</text>
                             <text x='598' y='-5' class='month'>Jun</text>
                             <text x='650' y='-5' class='month'>Jul</text>
-                            <text text-anchor='middle' class='wday' dx='-10' dy='9' style='display: none;'>S</text>
-                            <text text-anchor='middle' class='wday' dx='-10' dy='22'>M</text>
-                            <text text-anchor='middle' class='wday' dx='-10' dy='35' style='display: none;'>T</text>
-                            <text text-anchor='middle' class='wday' dx='-10' dy='48'>W</text>
-                            <text text-anchor='middle' class='wday' dx='-10' dy='61' style='display: none;'>T</text>
-                            <text text-anchor='middle' class='wday' dx='-10' dy='74'>F</text>
-                            <text text-anchor='middle' class='wday' dx='-10' dy='87' style='display: none;'>S</text>
+                            <text text-anchor='middle' class='wday' dx='-10' dy='23'>M</text>
+                            <text text-anchor='middle' class='wday' dx='-10' dy='50'>W</text>
+                            <text text-anchor='middle' class='wday' dx='-10' dy='78'>F</text>
                         </g>
                     </svg>
                     </center>
