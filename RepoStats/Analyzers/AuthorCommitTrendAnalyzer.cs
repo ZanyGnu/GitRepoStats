@@ -107,8 +107,8 @@ namespace RepoStats.Analyzers
                 //<g transform='translate({0}, 0)'>< rect class='day' width='11' height='11' y='{1}' fill='{2}' data-count='{3}' data-date='{4}'></rect></g>";
                 svgCells.AppendFormat(
                     HtmlTemplates.SvgContribution.CellEntryTemplate,
-                    13 * (currentDateOffset / 7),
-                    13 * (currentDateOffset % 7),
+                    14 * (currentDateOffset / 7),
+                    14 * (currentDateOffset % 7),
                     CommitCountToColor(currentCommitCount),
                     currentCommitCount,
                     currentDate.ToString("yyyy-MM-dd")

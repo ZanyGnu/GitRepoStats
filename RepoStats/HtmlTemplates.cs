@@ -98,6 +98,7 @@ namespace RepoStats
                 <tr class='contrib-title-row'><td class='contrib-title-box'><h1>Contributions</h1></td></tr>
                 <tr class='contrib-calendar-row'><td>
                     <div id='tooltipSpan' class='contribToolTip'>tool</div>
+                    <center>
                     <svg width = '721' height='110' onload='init(evt)'>
                         <script type='text/ecmascript'><![CDATA[
                             function cc(mouseEvt)
@@ -182,6 +183,7 @@ namespace RepoStats
                             <text text-anchor='middle' class='wday' dx='-10' dy='87' style='display: none;'>S</text>
                         </g>
                     </svg>
+                    </center>
                 </td></tr>
             </table>
             <br/>
