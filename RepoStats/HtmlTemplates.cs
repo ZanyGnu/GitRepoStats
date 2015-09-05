@@ -10,7 +10,7 @@ namespace RepoStats
                 <script type = 'text/javascript' src='http://code.jquery.com/jquery-1.9.1.js'></script>
                 <script type = 'text/javascript' src='http://code.highcharts.com/highcharts.js'></script>
                 <script type = 'text/javascript' src='http://code.highcharts.com/modules/exporting.js'></script>
-                <link href='css/styles.css' rel='stylesheet' />
+                <link href='/css/styles.css' rel='stylesheet' />
             </head>
             <body>
             ";
@@ -123,7 +123,7 @@ namespace RepoStats
                                     return;
                                 }
                                 else {
-                                    dataUrl = 'commitsByDate/' + date + '.html';
+                                    dataUrl = '/' + '{0}' + date + '.html';
                                 }
 
                                 $.ajax({    
@@ -295,7 +295,7 @@ namespace RepoStats
               <html>
 
                 <head>
-                <link href='css/styles.css' rel='stylesheet' />
+                <link href='/css/styles.css' rel='stylesheet' />
                 </head>
                 <h1>Commits on {0}</h1><br/>
                 <div class=WordSection1>

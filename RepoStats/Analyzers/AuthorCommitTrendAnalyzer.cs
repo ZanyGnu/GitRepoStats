@@ -116,7 +116,7 @@ namespace RepoStats.Analyzers
             }
 
             return String.Concat(
-                String.Format(HtmlTemplates.SvgContribution.SVGTemplatePre.EscapeForFormat(), "."),
+                String.Format(HtmlTemplates.SvgContribution.SVGTemplatePre.EscapeForFormat(), "commitsByAuthor/" + author + "/"),
                 svgCells,
                 HtmlTemplates.SvgContribution.SVGTemplatePost);
         }
