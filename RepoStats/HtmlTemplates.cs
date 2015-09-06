@@ -206,58 +206,70 @@ namespace RepoStats
             public static string GraphTemplate = @"
                 <script type='text/javascript'>//<![CDATA[ 
 
-                $(function () {{
-                    $('#container').highcharts({{
-                        chart: {{
-                            zoomType: 'x'
-                        }},
-                        title: {{
+                $(function () {
+                    $('#container').highcharts({
+                        chart: {
+                            zoomType: 'x',
+                            type:'area',
+                        },
+                        title: {
                             text: 'Daily code trend',
                             x: -20 //center
-                        }},
-                        subtitle: {{
+                        },
+                        subtitle: {
                             text: '',
                             x: -20
-                        }},
-                        xAxis: {{
+                        },
+                        xAxis: {
                             categories: [
                                 {0}
                             ]
-                        }},
-                        yAxis: {{
-                            title: {{
+                        },
+                        yAxis: {
+                            title: {
                                 text: 'Count'
-                            }},
-                            plotLines: [{{
+                            },
+                            plotLines: [{
                                 value: 0,
                                 width: 1,
                                 color: '#808080'
-                            }}]
-                        }},
-                        /*tooltip: {{
+                            }]
+                        },
+                        /*tooltip: {
                             valueSuffix: '°C'
-                        }},*/
-                        legend: {{
+                        },*/
+                        legend: {
                             layout: 'vertical',
                             align: 'right',
                             verticalAlign: 'middle',
                             borderWidth: 0
-                        }},
+                        },
+                        plotOptions: {
+                            area: {
+                                stacking: 'normal',
+                                lineColor: '#666666',
+                                lineWidth: 1,
+                                marker: {
+                                    lineWidth: 1,
+                                    lineColor: '#666666'
+                                }
+                            }
+                        },
                         series: [
                         {1}
                         ]
-                    }});
-                }});
+                    });
+                });
                 //]]>  
 
                 </script>
             ";
 
             public static string SeriesTemplate = @"
-                            {{
+                            {
                                 name: '{0}',
                                 data: [{1}]
-                            }}, ";
+                            }, ";
         }
         
         public static class CommitDetails

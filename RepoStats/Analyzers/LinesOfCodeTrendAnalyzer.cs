@@ -5,12 +5,15 @@ namespace RepoStats.Analyzers
 
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Text;
 
     class LinesOfCodeTrendAnalyzer: FileChangeAnalyzer
     {
-        Dictionary<DateTime, long> lineCountByDate = new Dictionary<DateTime, long>();
+        Dictionary<string, Dictionary<string, long>> lineCountByExtension = new Dictionary<string, Dictionary<string, long>>();
+        HashSet<string> categoryDates = new HashSet<string>();
+
         long totalLineCount = 0;
 
         public void Visit(Commit commit)
@@ -19,7 +22,17 @@ namespace RepoStats.Analyzers
 
         public void Visit(Commit commit, FileChanges fileChanges)
         {
-            DateTime commitDate = commit.Committer.When.DateTime.Round(TimeSpan.FromDays(1));
+            string commitDate = commit.Committer.When.DateTime.ToString("dd/MM/yy");
+            categoryDates.Add(commitDate);
+
+            Dictionary<string, long> lineCountByDate = null;
+            string extension = Path.GetExtension(fileChanges.Path);
+            if (!lineCountByExtension.TryGetValue(extension, out lineCountByDate))
+            {
+                lineCountByDate = new Dictionary<string, long>();
+                lineCountByExtension[extension] = lineCountByDate;
+            }
+
             if (!lineCountByDate.ContainsKey(commitDate))
             {
                 lineCountByDate[commitDate] = 0;
@@ -31,16 +44,6 @@ namespace RepoStats.Analyzers
 
         public void Write()
         {
-            //Console.WriteLine("Line count by date");
-            //IOrderedEnumerable<KeyValuePair<DateTime, long>> orderedLineCounts = lineCountByDate.OrderBy(c => c.Key);
-            //long currentTotalCount = 0;
-            //foreach (KeyValuePair<DateTime, long> lineCountOnDate in orderedLineCounts)
-            //{
-            //    currentTotalCount += lineCountOnDate.Value;
-            //    Console.WriteLine("\t{0} |{1}",
-            //        lineCountOnDate.Key.ToString("dd/MM/yy"),
-            //        new String('*', (int)((currentTotalCount * 100) / totalLineCount)));
-            //}
         }
 
         public string GetFormattedString()
@@ -59,27 +62,65 @@ namespace RepoStats.Analyzers
             },
             */
 
-            StringBuilder categoryString = new StringBuilder();
+            StringBuilder categoryString = new StringBuilder(categoryDates.Count);
+            StringBuilder seriesString = new StringBuilder(categoryDates.Count);
             StringBuilder seriesDataString = new StringBuilder();
-            IOrderedEnumerable<KeyValuePair<DateTime, long>> orderedLineCounts = lineCountByDate.OrderBy(c => c.Key);
-            long currentTotalCount = 0;
-            foreach (KeyValuePair<DateTime, long> lineCountOnDate in orderedLineCounts)
-            {
-                currentTotalCount += lineCountOnDate.Value;
+            var orderedLineCountByExtension = lineCountByExtension.OrderByDescending(c => c.Value.Sum(x => x.Value));
 
-                categoryString.AppendFormat("'{0}', ", lineCountOnDate.Key.ToString("dd/MM/yy"));
+            foreach (KeyValuePair<string, Dictionary<string, long>> entry in orderedLineCountByExtension.Take(6))
+            {
+                PopulateSeriesData(seriesString, seriesDataString, entry.Key, entry.Value);
+            }
+
+            Dictionary<string, long> others = new Dictionary<string, long>();
+
+            foreach (KeyValuePair<string, Dictionary<string, long>> entry in orderedLineCountByExtension.Skip(6))
+            {
+                foreach(KeyValuePair<string, long> x in entry.Value)
+                {
+                    if (!others.ContainsKey(x.Key))
+                    {
+                        others[x.Key] = 0;
+                    }
+                    others[x.Key] += x.Value;
+                };
+            }
+
+            PopulateSeriesData(seriesString, seriesDataString, "Others", others);
+
+            foreach (string date in categoryDates)
+            {
+                categoryString.AppendFormat("'{0}', ", date);
+            }
+
+            return HtmlTemplates.Graph.ContainerTempalte + 
+                String.Format(
+                    HtmlTemplates.Graph.GraphTemplate.EscapeForFormat(), 
+                    categoryString.ToString(),
+                    seriesString.ToString());
+        }
+
+        private void PopulateSeriesData(StringBuilder seriesString, StringBuilder seriesDataString, string seriesName, Dictionary<string, long> seriesValues)
+        {
+            seriesDataString.Clear();
+            IOrderedEnumerable<KeyValuePair<string, long>> orderedLineCounts = seriesValues.OrderBy(c => c.Key);
+            long currentTotalCount = 0;
+            foreach (string date in categoryDates)
+            {
+                long lineCount = 0;
+                if (seriesValues.ContainsKey(date))
+                {
+                    lineCount = seriesValues[date];
+                }
+                currentTotalCount += lineCount;
+
                 seriesDataString.AppendFormat("{0}, ", currentTotalCount);
             }
 
-            string seriesString = String.Format(
-                HtmlTemplates.Graph.SeriesTemplate, 
-                "Lines Of Code", 
+            seriesString.AppendFormat(
+                HtmlTemplates.Graph.SeriesTemplate.EscapeForFormat(),
+                seriesName,
                 seriesDataString.ToString());
-
-            return HtmlTemplates.Graph.ContainerTempalte + String.Format(
-                HtmlTemplates.Graph.GraphTemplate, 
-                categoryString.ToString(),
-                seriesString);
         }
     }
 }
