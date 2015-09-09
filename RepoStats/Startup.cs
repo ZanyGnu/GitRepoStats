@@ -1,11 +1,16 @@
 ﻿
 namespace RepoStats
 {
+    using LibGit2Sharp;
     using Microsoft.Owin;
     using Microsoft.Owin.FileSystems;
     using Microsoft.Owin.StaticFiles;
     using Owin;
+    using ProtoBuf;
     using System;
+    using System.Collections.Generic;
+    using System.Configuration;
+    using System.IO;
     using System.Web.Http;
 
     public class Startup
@@ -33,15 +38,27 @@ namespace RepoStats
 
     public class CheckinController : ApiController
     {
+        public string guid = Guid.NewGuid().ToString();
+
         public CheckinController()
         {
         }
 
         // Gets
         [HttpGet]
-        public String Get(string checkinId)
+        public List<FileChanges> Get(string checkinId)
         {
-            return "Hello world";
+            Repository repo = new Repository(ConfigurationManager.AppSettings["RepoRoot"]);
+            //Commit commit = repo.Lookup<Commit>(checkinId);
+            //return commit.Message;
+
+            string patchDirectory = Path.Combine(repo.Info.Path, "patches");
+            List<FileChanges> fileChanges = null;
+
+            string patchFileName = patchDirectory + "/" + checkinId + ".bin";
+            fileChanges = Serializer.Deserialize<List<FileChanges>>(File.OpenRead(patchFileName));
+
+            return fileChanges;
         }
     }
 }
