@@ -32,5 +32,8 @@ namespace RepoStats
 
         [ProtoMember(3)]
         public int LinesDeleted;
+
+        [ProtoMember(4)]
+        public string Diff;
     }
 }

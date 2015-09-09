@@ -94,6 +94,12 @@ namespace RepoStats
                     {
                         fileChanges = new List<FileChanges>();
                         // TODO: need to handle multiple parents.
+                        if (c.Parents.Count() > 1)
+                        {
+                            // ignore all merge commits
+                            continue;
+                        }
+
                         Patch changes = null;
                         changes = repo.Diff.Compare<Patch>(c.Parents.First().Tree, c.Tree);
 
@@ -103,6 +109,7 @@ namespace RepoStats
                             {
                                 LinesAdded = patchChanges.LinesAdded,
                                 LinesDeleted = patchChanges.LinesDeleted,
+                                Diff = patchChanges.Patch,
                                 Path = patchChanges.Path
                             };
 
