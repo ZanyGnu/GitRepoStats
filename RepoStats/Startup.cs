@@ -8,6 +8,7 @@ namespace RepoStats
     using Owin;
     using ProtoBuf;
     using System;
+    using System.Linq;
     using System.Collections.Generic;
     using System.Configuration;
     using System.IO;
@@ -55,8 +56,12 @@ namespace RepoStats
             string patchDirectory = Path.Combine(repo.Info.Path, "patches");
             List<FileChanges> fileChanges = null;
 
-            string patchFileName = patchDirectory + "/" + checkinId + ".bin";
-            fileChanges = Serializer.Deserialize<List<FileChanges>>(File.OpenRead(patchFileName));
+            IEnumerable<string> files = Directory.EnumerateFiles(patchDirectory, checkinId + "*", SearchOption.TopDirectoryOnly);
+            if (files != null && files.Any())
+            {
+                string patchFileName = files.First();
+                fileChanges = Serializer.Deserialize<List<FileChanges>>(File.OpenRead(patchFileName));
+            }
 
             return fileChanges;
         }
