@@ -13,6 +13,11 @@ namespace RepoStats
     using System.Configuration;
     using System.IO;
     using System.Web.Http;
+    using System.Web.Routing;
+    using System.Threading.Tasks;
+    using System.Net.Http;
+    using RazorEngine;
+    using RazorEngine.Templating;
 
     public class Startup
     {
@@ -28,6 +33,7 @@ namespace RepoStats
 
             HttpConfiguration config = new HttpConfiguration();
             config.Routes.MapHttpRoute("Default", "{controller}/{checkinID}", new { controller = "Checkin", checkinID = RouteParameter.Optional });
+            config.Routes.MapHttpRoute("Default2", "{controller}/{checkinID}", new { controller = "Razor", checkinID = RouteParameter.Optional });
 
             config.Formatters.XmlFormatter.UseXmlSerializer = true;
             config.Formatters.Remove(config.Formatters.JsonFormatter);
@@ -64,6 +70,15 @@ namespace RepoStats
             }
 
             return fileChanges;
+        }
+    }
+    public class RazorController : ApiController
+    {
+        public HttpContent Details(string checkinId)
+        {
+            var model = new { Name = "World", Email = "someone@somewhere.com" };
+            string result = Engine.Razor.RunCompile(new LoadedTemplateSource("commit.cshtml"), "templateKey", null, model);
+            return new StringContent(result, System.Text.Encoding.UTF8, "text/html");
         }
     }
 }
