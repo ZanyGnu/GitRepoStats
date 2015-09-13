@@ -23,6 +23,8 @@ namespace RepoStats
     {
         public void Configuration(IAppBuilder app)
         {
+            app.UseErrorPage();
+
             // Remap '/' to '.\defaults\'.
             // Turns on static files and default files.
             app.UseFileServer(new FileServerOptions()
@@ -35,11 +37,13 @@ namespace RepoStats
             config.Routes.MapHttpRoute("Default", "{controller}/{checkinID}", new { controller = "Checkin", checkinID = RouteParameter.Optional });
             config.Routes.MapHttpRoute("Default2", "{controller}/{checkinID}", new { controller = "Razor", checkinID = RouteParameter.Optional });
 
-            config.Formatters.XmlFormatter.UseXmlSerializer = true;
-            config.Formatters.Remove(config.Formatters.JsonFormatter);
-            // config.Formatters.JsonFormatter.UseDataContractJsonSerializer = true;
+            //config.Formatters.XmlFormatter.UseXmlSerializer = true;
+            //config.Formatters.Remove(config.Formatters.JsonFormatter);
+            config.Formatters.Remove(config.Formatters.XmlFormatter);
+            config.Formatters.JsonFormatter.UseDataContractJsonSerializer = true;
 
             app.UseWebApi(config);
+            app.UseWelcomePage();
         }
     }
 
@@ -72,13 +76,19 @@ namespace RepoStats
             return fileChanges;
         }
     }
+
     public class RazorController : ApiController
     {
-        public HttpContent Details(string checkinId)
+        [HttpGet]
+        public HttpResponseMessage Get(string checkinId)
         {
             var model = new { Name = "World", Email = "someone@somewhere.com" };
-            string result = Engine.Razor.RunCompile(new LoadedTemplateSource("commit.cshtml"), "templateKey", null, model);
-            return new StringContent(result, System.Text.Encoding.UTF8, "text/html");
+            string template = File.ReadAllText("views\\commit.cshtml");
+            string result = Engine.Razor.RunCompile(template, "templateKey", null, model);
+            return new HttpResponseMessage()
+            {
+                Content = new StringContent(result, System.Text.Encoding.UTF8, "text/html"), 
+            };
         }
     }
 }
