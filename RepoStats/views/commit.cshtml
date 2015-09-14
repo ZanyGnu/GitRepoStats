@@ -9,16 +9,25 @@
 <body>
 
     <table class='contrib-table'>
-        <tr class='contrib-title-row'>
+        <tr class='contrib-title-row' style="column-span:4;border-bottom:thick">
             <td class='contrib-title-box'>
-                <h1>Commit {0}</h1>
+                Changes for commit @Model.Commit.Sha
+                <br />
+                @Model.Commit.Message
             </td>
         </tr>
-        <tr>
+
+        @foreach (var item in Model.FileChanges)
+        {
+        <tr  style="border-bottom:thin">
+            <td valign="top">                
+               <span>@item.Path</span>
+            </td>
             <td>
-                
+                <pre>@item.Diff</pre>
             </td>
         </tr>
+        }
     </table>
 </body>
 </html>

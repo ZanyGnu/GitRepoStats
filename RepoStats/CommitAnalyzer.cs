@@ -3,6 +3,7 @@ namespace RepoStats
 {
     using LibGit2Sharp;
     using ProtoBuf;
+    using System.Collections.Generic;
 
     public interface CommitAnalyzer: IOutputWriter
     {
@@ -35,5 +36,11 @@ namespace RepoStats
 
         [ProtoMember(4)]
         public string Diff;
+    }
+
+    public class CommitDetails
+    {
+        public Commit Commit;
+        public List<FileChanges> FileChanges;        
     }
 }
