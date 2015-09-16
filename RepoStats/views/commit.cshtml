@@ -10,23 +10,28 @@
 
     <table class='contrib-table'>
         <tr class='contrib-title-row' style="column-span:4;border-bottom:thick">
-            <td class='contrib-title-box'>
+            <td class='contrib-title-box' style="border-bottom:thick" colspan="4">
                 Changes for commit @Model.Commit.Sha
                 <br />
                 @Model.Commit.Message
             </td>
         </tr>
 
-        @foreach (var item in Model.FileChanges)
-        {
-        <tr  style="border-bottom:thin">
-            <td valign="top">                
-               <span>@item.Path</span>
-            </td>
-            <td>
-                <pre>@item.Diff</pre>
-            </td>
-        </tr>
+                @foreach (var item in Model.FileChanges)
+                {
+                    <tr style="border-bottom:thin">
+                        <td valign="top" colspan="4">
+                            <span>@item.Path</span>
+                        </td>
+                    </tr>
+                    <tr style="border-bottom:thick">
+                        <td>
+                            <span style="width:40px;display:inline-block">&nbsp;&nbsp;</span>
+                        </td>
+                        <td>
+                            <pre>@item.Diff</pre>
+                        </td>
+                    </tr>
         }
     </table>
 </body>
