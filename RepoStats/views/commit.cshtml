@@ -19,8 +19,8 @@
 
                 @foreach (var item in Model.FileChanges)
                 {
-                    <tr style="border-bottom:thin">
-                        <td valign="top" colspan="4">
+                    <tr class="contrib-title-row" style="border-bottom:thin">
+                        <td class='contrib-title-box' valign="top" colspan="4">
                             <span>@item.Path</span>
                         </td>
                     </tr>
@@ -29,7 +29,17 @@
                             <span style="width:40px;display:inline-block">&nbsp;&nbsp;</span>
                         </td>
                         <td>
-                            <pre>@item.Diff</pre>
+                            @foreach (var line in item.Diff.Split('\n'))
+                            {
+                                if (line.StartsWith("+"))
+                                {
+                                    @:<pre>@line</pre>
+                                }
+                                else
+                                {
+                                    @:<span style="">@line</span>
+                                }
+                            }
                         </td>
                     </tr>
         }
