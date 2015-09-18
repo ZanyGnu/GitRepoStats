@@ -35,6 +35,7 @@ namespace RepoStats
 
             HttpConfiguration config = new HttpConfiguration();
             config.Routes.MapHttpRoute("Default", "{controller}/{checkinID}", new { controller = "Checkin", checkinID = RouteParameter.Optional });
+            config.Routes.MapHttpRoute("Default3", "{controller}/route/{arg}", new { controller = "Checkin", checkinID = RouteParameter.Optional });
             config.Routes.MapHttpRoute("Default2", "{controller}/{checkinID}", new { controller = "Razor", checkinID = RouteParameter.Optional });
 
             //config.Formatters.XmlFormatter.UseXmlSerializer = true;
@@ -60,6 +61,13 @@ namespace RepoStats
         public CommitDetails Get(string checkinId)
         {
             return GetCheckinDetails(checkinId);
+        }
+
+        [HttpGet]
+        [ActionName("route")]
+        public string Route(string arg)
+        {
+            return "route controller";
         }
 
         public static CommitDetails GetCheckinDetails(string checkinId)
