@@ -13,8 +13,17 @@ namespace RepoStats.Analyzers
     {
         Dictionary<string, Dictionary<string, long>> lineCountByExtension = new Dictionary<string, Dictionary<string, long>>();
         HashSet<string> categoryDates = new HashSet<string>();
-
+        string author = null;
         long totalLineCount = 0;
+
+        public LinesOfCodeTrendAnalyzer():this(null)
+        {
+        }
+
+        public LinesOfCodeTrendAnalyzer(string author)
+        {
+            this.author = author;
+        }
 
         public void Visit(Commit commit)
         {
@@ -22,6 +31,11 @@ namespace RepoStats.Analyzers
 
         public void Visit(Commit commit, FileChanges fileChanges)
         {
+            if (!String.IsNullOrEmpty(this.author) && !String.Equals(commit.Committer.Email, this.author, StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
             string commitDate = commit.Committer.When.DateTime.ToString("dd/MM/yy");
             categoryDates.Add(commitDate);
 
