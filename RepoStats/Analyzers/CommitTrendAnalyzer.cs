@@ -5,6 +5,7 @@ namespace RepoStats.Analyzers
 
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Text;
 
@@ -30,16 +31,7 @@ namespace RepoStats.Analyzers
 
         public void Write()
         {
-            Console.WriteLine("Commit count by date");
-            IOrderedEnumerable<KeyValuePair<DateTime,long>> orderedCommitCounts = commitCountByDate.OrderBy(c => c.Key);
-            long currentTotalCount = 0;
-            foreach (KeyValuePair<DateTime, long> commitCountOnDate in orderedCommitCounts)
-            {
-                currentTotalCount += commitCountOnDate.Value;
-                Console.WriteLine("\t{0} |{1}", 
-                    commitCountOnDate.Key.ToString("dd/MM/yy"), 
-                    new String('*', (int)((currentTotalCount * 100)/ totalCommitCount)));
-            }
+            File.WriteAllText("RepoContributionMap.html", GetFormattedString());
         }
 
         public string GetFormattedString()
