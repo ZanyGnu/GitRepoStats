@@ -34,9 +34,9 @@ namespace RepoStats
             });
 
             HttpConfiguration config = new HttpConfiguration();
-            config.Routes.MapHttpRoute("Default", "{controller}/{checkinID}", new { controller = "Checkin", checkinID = RouteParameter.Optional });
-            config.Routes.MapHttpRoute("Default3", "{controller}/route/{arg}", new { controller = "Checkin", checkinID = RouteParameter.Optional });
-            config.Routes.MapHttpRoute("Default2", "{controller}/{checkinID}", new { controller = "Razor", checkinID = RouteParameter.Optional });
+            //config.Routes.MapHttpRoute("Default", "{controller}/{checkinID}", new { controller = "Checkin", checkinID = RouteParameter.Optional });
+            //config.Routes.MapHttpRoute("Default3", "{controller}/route/{arg}", new { controller = "Checkin", checkinID = RouteParameter.Optional });
+            config.Routes.MapHttpRoute("Default", "{controller}/{commitID}", new { controller = "Commit", commitID = RouteParameter.Optional });
 
             //config.Formatters.XmlFormatter.UseXmlSerializer = true;
             //config.Formatters.Remove(config.Formatters.JsonFormatter);
@@ -92,13 +92,13 @@ namespace RepoStats
         }
     }
 
-    public class RazorController : ApiController
+    public class CommitController : ApiController
     {
         [HttpGet]
-        public HttpResponseMessage Get(string checkinId)
+        public HttpResponseMessage Get(string commitID)
         {
             string template = File.ReadAllText("views\\commit.cshtml");
-            string result = Engine.Razor.RunCompile(template, "templateName", null, CheckinController.GetCheckinDetails(checkinId));
+            string result = Engine.Razor.RunCompile(template, "templateName", null, CheckinController.GetCheckinDetails(commitID));
             return new HttpResponseMessage()
             {
                 Content = new StringContent(result, System.Text.Encoding.UTF8, "text/html"), 
