@@ -38,6 +38,7 @@ namespace RepoStats
             //config.Routes.MapHttpRoute("Default3", "{controller}/route/{arg}", new { controller = "Checkin", checkinID = RouteParameter.Optional });
             config.Routes.MapHttpRoute("Default", "{controller}/{commitID}", new { controller = "Commit", commitID = RouteParameter.Optional });
             config.Routes.MapHttpRoute("Default2", "{controller}", new { controller = "Repository" });
+            config.Routes.MapHttpRoute("Default3", "{controller}/{user}", new { controller = "User", user = RouteParameter.Optional });
 
             //config.Formatters.XmlFormatter.UseXmlSerializer = true;
             //config.Formatters.Remove(config.Formatters.JsonFormatter);
@@ -115,6 +116,22 @@ namespace RepoStats
             string template = File.ReadAllText("views\\repository.cshtml");
             string bodyContent = File.ReadAllText("RepoContributionMap.html");
             var model = new { Title = "Repository Details", BodyContent = bodyContent };
+            string result = Engine.Razor.RunCompile(template, "templateName", null, model);
+            return new HttpResponseMessage()
+            {
+                Content = new StringContent(result, System.Text.Encoding.UTF8, "text/html"),
+            };
+        }
+    }
+
+    public class UserController : ApiController
+    {
+        [HttpGet]
+        public HttpResponseMessage Get(string user)
+        {
+            string template = File.ReadAllText("views\\user.cshtml");
+            string bodyContent = File.ReadAllText("CommitsByAuthor/" + user + "Contributions.html");
+            var model = new { Title = "Commit Details for " + user, BodyContent = bodyContent };
             string result = Engine.Razor.RunCompile(template, "templateName", null, model);
             return new HttpResponseMessage()
             {
