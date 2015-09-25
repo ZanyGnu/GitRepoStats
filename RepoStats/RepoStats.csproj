@@ -123,6 +123,7 @@
     <Compile Include="CommitAnalyzer.cs" />
     <Compile Include="CommitIterator.cs" />
     <Compile Include="Controller\CommitController.cs" />
+    <Compile Include="Controller\RepositoryController.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Program.cs" />
