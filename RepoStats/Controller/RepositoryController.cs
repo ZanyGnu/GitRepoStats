@@ -15,7 +15,7 @@ namespace RepoStats.Controller
             string template = File.ReadAllText("views\\repository.cshtml");
             string bodyContent = File.ReadAllText("RepoContributionMap.html");
             var model = new { Title = "Repository Details", BodyContent = bodyContent };
-            string result = Engine.Razor.RunCompile(template, "templateName", null, model);
+            string result = Engine.Razor.RunCompile(template, "templateNameRepository", null, model);
             return new HttpResponseMessage()
             {
                 Content = new StringContent(result, System.Text.Encoding.UTF8, "text/html"),
